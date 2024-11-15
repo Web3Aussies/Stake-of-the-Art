@@ -2,6 +2,7 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { connectToDatabase } from './services/database.services';
+import bot from './bot';
 
 dotenv.config();
 
@@ -24,6 +25,10 @@ connectToDatabase()
         app.get('/', (req: Request, res: Response) => {
             res.send("Express + Typescript server")
         });
+
+        // Endpoints
+
+        bot();
 
         app.listen(port, () => {
             console.log(`Server is running on port: ${port}`);

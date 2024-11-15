@@ -10,9 +10,9 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract StakeOfTheArt is ERC721, ERC721URIStorage, ERC721Pausable, Ownable {
     uint256 private _nextTokenId;
 
-    constructor(address initialOwner)
+    constructor()
         ERC721("Stake Of The Art", "SOTA")
-        Ownable(initialOwner)
+        Ownable(msg.sender)
     {}
 
     function pause() public onlyOwner {

@@ -14,10 +14,10 @@ namespace StakingArt.Features.App.Accounts;
 public class AccountsController(IMediator mediator) : ControllerBase
 {
     [AllowAnonymous]
-    [HttpGet("nuance")]
+    [HttpGet("nonce")]
     [TranslateResultToActionResult]
     [ExpectedFailures(ResultStatus.Ok)]
-    public Task<Result<LoginNuanceResponse>> GetNuance() => mediator.Send(new GetLoginNonce());
+    public Task<Result<LoginNuanceResponse>> GetNonce() => mediator.Send(new GetLoginNonce());
 
     [AllowAnonymous]
     [HttpPost("login")]

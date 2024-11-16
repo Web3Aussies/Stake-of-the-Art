@@ -15,11 +15,14 @@ const { Options } = require("@layerzerolabs/lz-v2-utilities");
 dotenv.config();
 
 const rpcUrl = process.env.RPC_URL || "";
-const collectionAddress = "0x62976758Fa9f84309748f0650b60fbF2741Eda81"; // Replace with your contract address
+
+
+const dstEid = 40161; // Sepolia
+const collectionAddress = "0x3c8Ff373DC7b6A5f25cC8867B77CF4d651dF1106"; // Replace with your contract address
 const collection = JSON.parse(fs.readFileSync("./Collection.json", "utf-8"));
 const privateKey = process.env.PRIVATE_KEY || "";
 const account = privateKeyToAccount(privateKey);
-const galleryAddress = "0xd61Dd9BBEeC4043a9b3eE41F8Ab57580cfCf928E"; // Replace with your contract address
+const galleryAddress = "0xE3eE56B8102457D43beb87fbcC54eeE732E5a3Fc"; // Replace with your contract address
 
 // Initialize public client
 const publicClient = createPublicClient({
@@ -38,50 +41,47 @@ async function main() {
   console.log("Block Number:", blockNumber);
 
   const version = await publicClient.readContract({
-    address: curatorAddress,
-    abi: curator.abi,
+    address: collectionAddress,
+    abi: collection.abi,
     functionName: "owner",
   });
 
   console.log("App Version:", version);
 
   // Get quote
-  const dstEid = 40161; // Sepolia
+  
   const peers = await publicClient.readContract({
-    address: curatorAddress,
-    abi: curator.abi,
+    address: collectionAddress,
+    abi: collection.abi,
     functionName: "peers",
     args: [dstEid],
   });
 
   console.log("Peers", peers);
 
-  //   console.log('Quote Result:', quoteResult);
-  // } catch (error) {
-  //   console.error('Error calling contract:', error);
-  // }
 
-  // const message = "Hello, LayerZero!";
-  // const options = Options.newOptions()
-  //   .addExecutorLzReceiveOption(200000, 0)
-  //   .toHex()
-  //   .toString();
 
-  // const payInLzToken = false;
-  // const quoteResult = await publicClient.readContract({
-  //   address: curatorAddress,
-  //   abi: curator.abi, // Use ABI from the Foundry JSON file
-  //   functionName: "quote",
-  //   args: [dstEid, message, options, payInLzToken],
-  // });
+  const message = "Hello, LayerZero!";
+  const options = Options.newOptions()
+    .addExecutorLzReceiveOption(200000, 0)
+    .toHex()
+    .toString();
 
-  // console.log("Quote Result:", quoteResult);
+  const payInLzToken = false;
+  const quoteResult = await publicClient.readContract({
+    address: collectionAddress,
+    abi: collection.abi, // Use ABI from the Foundry JSON file
+    functionName: "quoteEnrolment",
+    args: [2],
+  });
+
+  console.log("Quote Result:", quoteResult);
 
   const sendTx = await walletClient.writeContract({
-    address: curatorAddress,
-    abi: curator.abi,
+    address: collectionAddress,
+    abi: collection.abi,
     functionName: "notifyEnrollment",
-    args: [dstEid, message, options],
+    args: [2],
     value: quoteResult.nativeFee,
   });
 
@@ -89,15 +89,6 @@ async function main() {
 
   // Print wallet address
   console.log(walletClient.account.address);
-  
-
-  // Try create a collection
-  walletClient.writeContract({
-    address: curatorAddress,
-    abi: curator.abi,
-    functionName: "createCollection",
-    args: ["0x9e1F2c3432ddCe2AAe0f605f38e3234EE6fbC91a"],    
-  });
 
 }
 

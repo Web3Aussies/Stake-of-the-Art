@@ -83,7 +83,7 @@ contract Collection is ONFT721Adapter {
         uint256 tokenId;
     }
 
-    function notifyEnrollment(uint256 tokenId) public {
+    function quoteEnrolment(uint256 tokenId) public view returns (MessagingFee memory) {
         // Notify the gallery of the enrollment
         bytes memory message = abi.encode(Enrolment(tokenAddress, tokenId));
 
@@ -93,8 +93,19 @@ contract Collection is ONFT721Adapter {
             .addExecutorLzComposeOption(0, 500000, 0);
 
         // Get quote
-        MessagingFee memory fee = _quote(galleryEid, message, options, false);
-        _lzSend(galleryEid, message, options, fee, msg.sender);
+        return _quote(galleryEid, message, options, false);
+    }
+
+    function notifyEnrollment(uint256 tokenId) public payable{
+        // Notify the gallery of the enrollment
+        bytes memory message = abi.encode(Enrolment(tokenAddress, tokenId));
+
+        bytes memory options = OptionsBuilder
+            .newOptions()
+            .addExecutorLzReceiveOption(200000, 0)
+            .addExecutorLzComposeOption(0, 500000, 0);
+
+        _lzSend(galleryEid, message, options, MessagingFee(msg.value, 0),msg.sender);                
     }
 
     function addressToBytes32(address _addr) internal pure returns (bytes32) {

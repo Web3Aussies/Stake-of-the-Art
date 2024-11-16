@@ -49,9 +49,10 @@ string ClassifyImage(string imageFilePath, string promptFilePath)
                     "items": {
                         "type": "object",
                         "properties": {
-                            "name": { "type": "string" }
+                            "name": { "type": "string" },
+                            "score": { "type": "integer" }
                         },
-                        "required": ["name"],
+                        "required": ["name", "score"],
                         "additionalProperties": false
                     }
                 }
@@ -60,8 +61,8 @@ string ClassifyImage(string imageFilePath, string promptFilePath)
             "additionalProperties": false
         }
         """u8.ToArray()),
-    jsonSchemaIsStrict: true),
-Temperature = 0
+	jsonSchemaIsStrict: true),
+		Temperature = 0
 	};
 
 	ChatCompletion completion = client.CompleteChat(messages, options);

@@ -7,6 +7,7 @@ import Command from "./command";
 import InfoBot from "./operations/info";
 import { collections } from "../services/database.services";
 import { User } from "../models/user";
+import BalanceBot from "./operations/balance";
 
 dotenv.config();
 
@@ -23,7 +24,7 @@ export default async function () {
     });
 
     // Create array of commands that the bot can handle
-    const bots: Command[] = [InfoBot];
+    const bots: Command[] = [InfoBot, BalanceBot];
 
 
     // Stream all messages to test if setup works

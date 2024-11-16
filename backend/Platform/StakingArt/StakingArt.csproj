@@ -21,6 +21,9 @@
 	  <PackageReference Include="Nethereum.HdWallet" Version="4.26.0" />
 	  <PackageReference Include="Nethereum.KeyStore" Version="4.26.0" />
 	  <PackageReference Include="Nethereum.Util" Version="4.26.0" />
+	  <PackageReference Include="Refit" Version="8.0.0" />
+	  <PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
+	  <PackageReference Include="Refit.Newtonsoft.Json" Version="8.0.0" />
 	  <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
 	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>

@@ -102,16 +102,31 @@ contract Collection is ONFT721Adapter {
 
 
     struct Test {
-        string greeting;
+        address tokenAddress;
+        uint256 tokenId;
+        string imageUri;
+        address rightsHolder;
     }
+
     function notifyEnrolment(uint32 _eid, uint256 _tokenId) public payable {
         // Notify the gallery of the enrollment
         // Enrolment memory enrolment = Enrolment(tokenAddress, _tokenId, "test", msg.sender);
         // bytes memory message = abi.encode(enrolment);
-        bytes memory message = abi.encode(Test("Hello"));
+        bytes memory message = encodeStruct(msg.sender);
         bytes memory options = OptionsBuilder.newOptions().addExecutorLzReceiveOption(200000, 0);
 
         _lzSend(_eid, message, options, MessagingFee(msg.value, 0), msg.sender);
+    }
+
+    function encodeStruct(address testAddress) internal pure returns (bytes memory) {
+        Test memory myStruct = Test({
+            tokenAddress: testAddress,
+            tokenId: 4,
+            imageUri: "test",
+            rightsHolder: testAddress
+        });
+
+        return abi.encode(myStruct);
     }
 
     function addressToBytes32(address _addr) internal pure returns (bytes32) {

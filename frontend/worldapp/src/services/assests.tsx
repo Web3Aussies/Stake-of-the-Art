@@ -43,7 +43,7 @@ export function useAssets({ token }: { token?: string }) {
     queryFn: async ({ queryKey }) => {
       const [_, height, width] = queryKey;
       const res = await fetch(
-        `${import.meta.env.VITE_API_ENDPOINT}/admin/assets?height=${height}&width=${width}`,
+        `${import.meta.env.VITE_API_ENDPOINT}/app/assets?height=${height}&width=${width}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

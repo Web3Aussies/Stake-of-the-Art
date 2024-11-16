@@ -16,7 +16,7 @@ export default function AppHomePage() {
     const { data, isLoading } = useQuery(SearchQuery({}));
 
     const handleAddAsset = () => {
-        //TODO: Add Asset
+        navigate({ to: '/app/assets/new' });
     };
 
     return (
@@ -42,7 +42,7 @@ export default function AppHomePage() {
                         className="max-w-sm"
                         imgAlt={i.title}
                         imgSrc={
-                            i.status != 'Pending' ? `https://assets.displayz.app/${i.imageUrl}` : '/placeholder.png'
+                            i.status != 'Pending' ? `https://assets.displayz.app${i.imageUrl}` : '/placeholder.png'
                         }
                     >
                         <div className="flex flex-row gap-2">

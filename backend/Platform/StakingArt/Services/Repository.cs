@@ -44,6 +44,7 @@ public class Repository : IRepository
 
             return new TModel() switch
             {
+                Asset => Assets.Collection.Find(Assets.Filter.Eq(x => x.Id, id) & Assets.Filter.Eq(x => x.UserId, userId)).SingleOrDefault() as TModel,
                 _ => throw new ArgumentOutOfRangeException()
             };
         }

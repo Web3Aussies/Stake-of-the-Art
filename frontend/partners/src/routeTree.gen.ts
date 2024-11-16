@@ -16,6 +16,8 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AppImport } from './routes/app'
 import { Route as AppIndexImport } from './routes/app/index'
 import { Route as AppOnboardingImport } from './routes/app/onboarding'
+import { Route as AppAssetsNewImport } from './routes/app/assets/new'
+import { Route as AppAssetsIdSignImport } from './routes/app/assets/$id/sign'
 
 // Create Virtual Routes
 
@@ -44,6 +46,18 @@ const AppIndexRoute = AppIndexImport.update({
 const AppOnboardingRoute = AppOnboardingImport.update({
   id: '/onboarding',
   path: '/onboarding',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppAssetsNewRoute = AppAssetsNewImport.update({
+  id: '/assets/new',
+  path: '/assets/new',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppAssetsIdSignRoute = AppAssetsIdSignImport.update({
+  id: '/assets/$id/sign',
+  path: '/assets/$id/sign',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -79,6 +93,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexImport
       parentRoute: typeof AppImport
     }
+    '/app/assets/new': {
+      id: '/app/assets/new'
+      path: '/assets/new'
+      fullPath: '/app/assets/new'
+      preLoaderRoute: typeof AppAssetsNewImport
+      parentRoute: typeof AppImport
+    }
+    '/app/assets/$id/sign': {
+      id: '/app/assets/$id/sign'
+      path: '/assets/$id/sign'
+      fullPath: '/app/assets/$id/sign'
+      preLoaderRoute: typeof AppAssetsIdSignImport
+      parentRoute: typeof AppImport
+    }
   }
 }
 
@@ -87,11 +115,15 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppOnboardingRoute: typeof AppOnboardingRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppAssetsNewRoute: typeof AppAssetsNewRoute
+  AppAssetsIdSignRoute: typeof AppAssetsIdSignRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppOnboardingRoute: AppOnboardingRoute,
   AppIndexRoute: AppIndexRoute,
+  AppAssetsNewRoute: AppAssetsNewRoute,
+  AppAssetsIdSignRoute: AppAssetsIdSignRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -101,12 +133,16 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteWithChildren
   '/app/onboarding': typeof AppOnboardingRoute
   '/app/': typeof AppIndexRoute
+  '/app/assets/new': typeof AppAssetsNewRoute
+  '/app/assets/$id/sign': typeof AppAssetsIdSignRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/app/onboarding': typeof AppOnboardingRoute
   '/app': typeof AppIndexRoute
+  '/app/assets/new': typeof AppAssetsNewRoute
+  '/app/assets/$id/sign': typeof AppAssetsIdSignRoute
 }
 
 export interface FileRoutesById {
@@ -115,14 +151,34 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/app/onboarding': typeof AppOnboardingRoute
   '/app/': typeof AppIndexRoute
+  '/app/assets/new': typeof AppAssetsNewRoute
+  '/app/assets/$id/sign': typeof AppAssetsIdSignRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app' | '/app/onboarding' | '/app/'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/app/onboarding'
+    | '/app/'
+    | '/app/assets/new'
+    | '/app/assets/$id/sign'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app/onboarding' | '/app'
-  id: '__root__' | '/' | '/app' | '/app/onboarding' | '/app/'
+  to:
+    | '/'
+    | '/app/onboarding'
+    | '/app'
+    | '/app/assets/new'
+    | '/app/assets/$id/sign'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/app/onboarding'
+    | '/app/'
+    | '/app/assets/new'
+    | '/app/assets/$id/sign'
   fileRoutesById: FileRoutesById
 }
 
@@ -157,7 +213,9 @@ export const routeTree = rootRoute
       "filePath": "app.tsx",
       "children": [
         "/app/onboarding",
-        "/app/"
+        "/app/",
+        "/app/assets/new",
+        "/app/assets/$id/sign"
       ]
     },
     "/app/onboarding": {
@@ -166,6 +224,14 @@ export const routeTree = rootRoute
     },
     "/app/": {
       "filePath": "app/index.tsx",
+      "parent": "/app"
+    },
+    "/app/assets/new": {
+      "filePath": "app/assets/new.tsx",
+      "parent": "/app"
+    },
+    "/app/assets/$id/sign": {
+      "filePath": "app/assets/$id/sign.tsx",
       "parent": "/app"
     }
   }

@@ -1,6 +1,12 @@
 import PublicLayout from '@/components/layouts/PublicLayout';
-import { createRootRoute } from '@tanstack/react-router';
+import { createRootRoute, createRootRouteWithContext } from '@tanstack/react-router';
 
-export const Route = createRootRoute({
+type AppContext = {
+    isAuthenticated: boolean;
+    token?:string
+    
+};
+
+export const Route = createRootRouteWithContext<AppContext>()({
     component: PublicLayout,
 });

@@ -11,20 +11,20 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as ExploreImport } from './routes/explore'
-import { Route as IndexImport } from './routes/index'
+import { Route as AppIndexImport } from './routes/_app/index'
+import { Route as AppExploreImport } from './routes/_app/explore'
 
 // Create/Update Routes
 
-const ExploreRoute = ExploreImport.update({
-  id: '/explore',
-  path: '/explore',
+const AppIndexRoute = AppIndexImport.update({
+  id: '/_app/',
+  path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
+const AppExploreRoute = AppExploreImport.update({
+  id: '/_app/explore',
+  path: '/explore',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -32,18 +32,18 @@ const IndexRoute = IndexImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/explore': {
-      id: '/explore'
+    '/_app/explore': {
+      id: '/_app/explore'
       path: '/explore'
       fullPath: '/explore'
-      preLoaderRoute: typeof ExploreImport
+      preLoaderRoute: typeof AppExploreImport
+      parentRoute: typeof rootRoute
+    }
+    '/_app/': {
+      id: '/_app/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AppIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -52,38 +52,38 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/explore': typeof ExploreRoute
+  '/explore': typeof AppExploreRoute
+  '/': typeof AppIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/explore': typeof ExploreRoute
+  '/explore': typeof AppExploreRoute
+  '/': typeof AppIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/explore': typeof ExploreRoute
+  '/_app/explore': typeof AppExploreRoute
+  '/_app/': typeof AppIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/explore'
+  fullPaths: '/explore' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/explore'
-  id: '__root__' | '/' | '/explore'
+  to: '/explore' | '/'
+  id: '__root__' | '/_app/explore' | '/_app/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  ExploreRoute: typeof ExploreRoute
+  AppExploreRoute: typeof AppExploreRoute
+  AppIndexRoute: typeof AppIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  ExploreRoute: ExploreRoute,
+  AppExploreRoute: AppExploreRoute,
+  AppIndexRoute: AppIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -96,15 +96,15 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/explore"
+        "/_app/explore",
+        "/_app/"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/_app/explore": {
+      "filePath": "_app/explore.tsx"
     },
-    "/explore": {
-      "filePath": "explore.tsx"
+    "/_app/": {
+      "filePath": "_app/index.tsx"
     }
   }
 }

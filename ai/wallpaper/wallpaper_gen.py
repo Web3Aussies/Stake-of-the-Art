@@ -46,4 +46,26 @@ def generate_image(prompt):
         else:
             print(f"Status: {result['status']}")
 
-generate_image("A a gloomy and smoke filled abstract background image")
+def save_image_from_url(filename, image_url):
+    # Specify the folder where you want to save the image
+    folder_path = '.\images' 
+    file_extension = '.jpg'
+    filename = filename + file_extension
+    image_path = os.path.join(folder_path, filename)
+    
+    # Ensure the folder exists
+    os.makedirs(folder_path, exist_ok=True)
+
+    # Download and save the image
+    response = requests.get(image_url)
+
+    # Check if the download was successful
+    if response.status_code == 200:
+        with open(image_path, 'wb') as file:
+            file.write(response.content)
+        print(f"Image successfully downloaded to: {image_path}")
+    else:
+        print(f"Failed to download image. Status code: {response.status_code}")
+
+wallpaper_url = generate_image("A rocket blasting off into space. Thick plumes of fire and smoke trail behind it as it ascends into the sky.")
+save_image_from_url("rocket", wallpaper_url)

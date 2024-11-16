@@ -16,6 +16,7 @@ import ListBot from "./operations/list";
 import { ReplyCodec } from "@xmtp/content-type-reply";
 import DownloadBot from "./operations/download";
 import { Login } from "../services/stakeoftheart";
+import { RemoteAttachmentCodec } from "@xmtp/content-type-remote-attachment";
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ export default async function () {
     const signer = new Wallet(`0x${process.env.XMTP_KEY!}`, provider);
     const client = await Client.create(signer, { env: "production" });
     client.registerCodec(new ReplyCodec());
+    client.registerCodec(new RemoteAttachmentCodec());
 
     const logger =  createLogger(true, "info", "bot", {
         walletAddress: client.address

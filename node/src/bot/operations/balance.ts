@@ -1,4 +1,4 @@
-import { createPublicClient, http } from "viem";
+import { createPublicClient, formatUnits, http } from "viem";
 import Command from "../command";
 import HandlerContext from "../context";
 import { polygonAmoy } from "viem/chains"
@@ -22,9 +22,7 @@ async function handle({ message, context }: HandlerContext) {
         address: context.address
     });
 
-
-    console.log(`Balance: ${balance}`)
-    await conversation.send(`${balance}`);
+    await conversation.send(`Your balance is ${formatUnits(balance, 18)} POL.`);
 }
 
 const BalanceBot = new Command("balance", handle);

@@ -3,12 +3,17 @@ pragma solidity ^0.8.22;
 
 import { ONFT721Adapter } from "@layerzerolabs/onft-evm/contracts/onft721/ONFT721Adapter.sol";
 import { IERC721 } from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import { OptionsBuilder } from "@layerzerolabs/oapp-evm/contracts/oapp/libs/OptionsBuilder.sol";
+import { MessagingFee, MessagingReceipt } from "@layerzerolabs/oft-evm/contracts/OFTCore.sol";
 
 contract Collection is ONFT721Adapter {
+    using OptionsBuilder for bytes;
 
+    address tokenAddress;
     address curator;
     address lzEndpoint;
     address delegate;
+    uint32 galleryEid;
 
     // Store the rights to the NFT
     struct RoyaltyRights {
@@ -20,11 +25,16 @@ contract Collection is ONFT721Adapter {
     mapping(uint256 => RoyaltyRights) public rights;
 
     constructor(
+        uint32 _galleryEid,
+        address _galleryAddress,
         address _curator,
         address _token,
         address _lzEndpoint,
         address _delegate
     ) ONFT721Adapter(_token, _lzEndpoint, _delegate) {
+        setPeer(_galleryEid, addressToBytes32(_galleryAddress));
+        tokenAddress = _token;
+        galleryEid = _galleryEid;
         curator = _curator;
         lzEndpoint = _lzEndpoint;
         delegate = _delegate;
@@ -39,7 +49,6 @@ contract Collection is ONFT721Adapter {
         // Send NFT cross-chain to staking contract on destination chain
         _credit(msg.sender, tokenId, 0);
     }
-
 
     // Handle Royalty Rights
     function setRoyaltyRights(uint256 tokenId, RoyaltyRights memory _rights) public {
@@ -68,4 +77,27 @@ contract Collection is ONFT721Adapter {
         delete rights[tokenId];
     }
 
+    // Send a message to the gallery Notifying of the enrollment
+    struct Enrolment {
+        address tokenAddress;
+        uint256 tokenId;
+    }
+
+    function notifyEnrollment(uint256 tokenId) public {
+        // Notify the gallery of the enrollment
+        bytes memory message = abi.encode(Enrolment(tokenAddress, tokenId));
+
+        bytes memory options = OptionsBuilder
+            .newOptions()
+            .addExecutorLzReceiveOption(200000, 0)
+            .addExecutorLzComposeOption(0, 500000, 0);
+
+        // Get quote
+        MessagingFee memory fee = _quote(galleryEid, message, options, false);
+        _lzSend(galleryEid, message, options, fee, msg.sender);
+    }
+
+    function addressToBytes32(address _addr) internal pure returns (bytes32) {
+        return bytes32(uint256(uint160(_addr)));
+    }
 }

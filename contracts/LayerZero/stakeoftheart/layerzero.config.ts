@@ -17,6 +17,11 @@ const worldGallery: OmniPointHardhat = {
     contractName: 'Gallery',
 }
 
+const amoyCollection: OmniPointHardhat = {
+    eid: EndpointId.AMOY_V2_TESTNET,
+    contractName: 'Collection',
+}
+
 const config: OAppOmniGraphHardhat = {
     contracts: [
         {
@@ -28,6 +33,9 @@ const config: OAppOmniGraphHardhat = {
         {
             contract: worldGallery,
         },
+        {
+            contract: amoyCollection,
+        },
     ],
     connections: [
         {
@@ -37,6 +45,14 @@ const config: OAppOmniGraphHardhat = {
         {
             from: sepGallery,
             to: amoyCurator,
+        },
+        {
+            from: sepGallery,
+            to: amoyCollection,
+        },
+        {
+            from: amoyCollection,
+            to: sepGallery,
         },
         {
             from: amoyCurator,

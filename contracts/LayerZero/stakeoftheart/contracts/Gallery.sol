@@ -47,9 +47,6 @@ contract Gallery is ONFT721 {
     ) internal virtual override {
         // Decode into Exhibit
         Exhibit memory exhibit = abi.decode(_extraData, (Exhibit));
-
-        Exhibit memory exhibit = ONFTComposeMsgCodec.decodeExhibit(_message);
-
-        emit ExhibitCreated(exhibitId, owner, title, description, imageUri, price);
+        emit ExhibitCreated(exhibit.tokenId, exhibit.rightsHolder, "", "", exhibit.imageUri, 0);
     }
 }

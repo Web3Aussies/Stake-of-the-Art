@@ -35,9 +35,9 @@ contract Curator is OApp, ISPHook {
     constructor(address _endpoint, address _delegate) OApp(_endpoint, _delegate) Ownable(_delegate) {}
 
     function createCollection(address tokenAddress) public {        
-        Collection child = new Collection(address(this), tokenAddress, lzEndpoint, curatorDelegate);
-        collections[tokenAddress] = address(child);
-    }
+        // Collection child = new Collection(address(this), tokenAddress, lzEndpoint, curatorDelegate);
+        // collections[tokenAddress] = address(child);
+    }    
 
     function send(
         uint32 _dstEid,

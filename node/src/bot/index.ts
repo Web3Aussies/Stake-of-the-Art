@@ -11,6 +11,7 @@ import BalanceBot from "./operations/balance";
 import CategoriesBot from "./operations/categories";
 import RegisterBot from "./operations/register";
 import DepositBot from "./operations/deposit";
+import SampleBot from "./operations/sample";
 
 dotenv.config();
 
@@ -27,7 +28,7 @@ export default async function () {
     });
 
     // Create array of commands that the bot can handle
-    const bots: Command[] = [InfoBot, BalanceBot, CategoriesBot, RegisterBot, DepositBot];
+    const bots: Command[] = [InfoBot, BalanceBot, CategoriesBot, RegisterBot, DepositBot, SampleBot];
 
 
     // Stream all messages to test if setup works

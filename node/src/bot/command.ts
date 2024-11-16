@@ -4,15 +4,21 @@ import { DecodedMessage } from "@xmtp/xmtp-js";
 import { WithId } from "mongodb";
 import { User } from "../models/user";
 import HandlerContext from "./context";
+import { createLogger } from "./logger";
+import { sleep } from "./utils";
 
 export default class Command {
     name: string;
     handler: BotHandler;
     running: boolean = false;
+    logger: pino.Logger;
 
     constructor (name: string, handler: BotHandler) {
         this.name = name;
         this.handler = handler;
+        this.logger = createLogger(true, "info", name, {
+            name: name
+        });
     }
 
     async processMessages(
@@ -22,7 +28,12 @@ export default class Command {
     ): Promise<boolean> {
         // Check if message is valid
         if (!message?.content || typeof message.content !== "string") {
-            console.log(`Message ${message.id} isn't valid.`);
+            
+            this.logger.warn(
+                { messageId: message.id },
+                "Message is not valid."
+            );
+
             return false;
         }
 
@@ -33,10 +44,16 @@ export default class Command {
             return false;
         }
 
+        // Log that we have recieved a message
+        this.logger.info(
+            { messageId: message.id },
+            `Message recieved: ${this.name}`
+        );
+
         try {
             await this.handler(new HandlerContext(message, context));
         } catch (err: any) {
-            console.log("Error ", err);
+            this.logger.error({ error: err }, "Error processing message.");
         }
 
         return true;
@@ -46,13 +63,14 @@ export default class Command {
         while (this.running) {
             try {
                 const numProcessed = 0;
-                console.log(`${numProcessed}`);
+                
+                this.logger.debug({ numProcessed }, "completed retry loop");
             } catch (err: any) {
-                console.log(`Error processing messages: ${err}`);
+                this.logger.error({ error: err }, "error processing messages");
             }
 
             // Sleep for 10 secs before retrying
-            // Plan to add sleep here
+            await sleep( 1000 * 10 );
         }
     }
 }

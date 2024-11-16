@@ -12,7 +12,7 @@ async function handle({ message, context }: HandlerContext) {
     // Send them their custodial wallet address to top
     const custodialAddress = context.address;
 
-    await conversation.send(`Deposit funds into your unique address: ${custodialAddress}`);
+    await conversation.send(`Deposit funds into your unique address:\n${custodialAddress}`);
 }
 
 const DepositBot = new Command("deposit", handle);

@@ -15,10 +15,11 @@ const { Options } = require("@layerzerolabs/lz-v2-utilities");
 dotenv.config();
 
 const rpcUrl = process.env.RPC_URL || "";
-const curatorAddress = "0x6A0704FFc0ef762bAAD164c42aC2F6A8382806d5"; // Replace with your contract address
-const curator = JSON.parse(fs.readFileSync("./Curator.json", "utf-8"));
+const collectionAddress = "0x62976758Fa9f84309748f0650b60fbF2741Eda81"; // Replace with your contract address
+const collection = JSON.parse(fs.readFileSync("./Collection.json", "utf-8"));
 const privateKey = process.env.PRIVATE_KEY || "";
 const account = privateKeyToAccount(privateKey);
+const galleryAddress = "0xd61Dd9BBEeC4043a9b3eE41F8Ab57580cfCf928E"; // Replace with your contract address
 
 // Initialize public client
 const publicClient = createPublicClient({
@@ -60,26 +61,26 @@ async function main() {
   //   console.error('Error calling contract:', error);
   // }
 
-  const message = "Hello, LayerZero!";
-  const options = Options.newOptions()
-    .addExecutorLzReceiveOption(200000, 0)
-    .toHex()
-    .toString();
+  // const message = "Hello, LayerZero!";
+  // const options = Options.newOptions()
+  //   .addExecutorLzReceiveOption(200000, 0)
+  //   .toHex()
+  //   .toString();
 
-  const payInLzToken = false;
-  const quoteResult = await publicClient.readContract({
-    address: curatorAddress,
-    abi: curator.abi, // Use ABI from the Foundry JSON file
-    functionName: "quote",
-    args: [dstEid, message, options, payInLzToken],
-  });
+  // const payInLzToken = false;
+  // const quoteResult = await publicClient.readContract({
+  //   address: curatorAddress,
+  //   abi: curator.abi, // Use ABI from the Foundry JSON file
+  //   functionName: "quote",
+  //   args: [dstEid, message, options, payInLzToken],
+  // });
 
-  console.log("Quote Result:", quoteResult);
+  // console.log("Quote Result:", quoteResult);
 
   const sendTx = await walletClient.writeContract({
     address: curatorAddress,
     abi: curator.abi,
-    functionName: "send",
+    functionName: "notifyEnrollment",
     args: [dstEid, message, options],
     value: quoteResult.nativeFee,
   });

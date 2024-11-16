@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using StakingArt.Infrastructure.WorldCoin;
+using StakingArt.Messages;
 using StakingArt.Models;
 using StakingArt.Services;
 
@@ -80,7 +81,8 @@ public class SignAssetHandler : IRequestHandler<SignAsset, Result>
 
         await _repository.Assets.Patch(x => x.Id == asset.Id, update, cancellationToken);
 
-        
+        // publish event
+        await _bus.Publish(new AssetSigned(asset.Id), cancellationToken);
 
         return Result.Success();
     }

@@ -7,8 +7,15 @@ import { MessagingReceipt } from "@layerzerolabs/oapp-evm/contracts/oapp/OAppSen
 import { IOAppReceiver, Origin } from "@layerzerolabs/oapp-evm/contracts/oapp/interfaces/IOAppReceiver.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import { IERC721 } from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract Curator is OApp {
+// Sign Protocol Dependencies
+import { ISP } from "@ethsign/sign-protocol-evm/src/interfaces/ISP.sol";
+import { Attestation } from "@ethsign/sign-protocol-evm/src/models/Attestation.sol";
+import { DataLocation } from "@ethsign/sign-protocol-evm/src/models/DataLocation.sol";
+import { ISPHook } from "@ethsign/sign-protocol-evm/src/interfaces/ISPHook.sol";
+
+contract Curator is OApp, ISPHook {
     address public galleryAddress;
     address public lzEndpoint;
     address public curatorDelegate;
@@ -27,25 +34,10 @@ contract Curator is OApp {
 
     constructor(address _endpoint, address _delegate) OApp(_endpoint, _delegate) Ownable(_delegate) {}
 
-    function createCollection(address tokenAddress) public onlyOwner {
-        require(collections[tokenAddress] == address(0), "Collection already exists");
-        Collection child = new Collection(tokenAddress, lzEndpoint, curatorDelegate);
-        collections[tokenAddress] = address(child);
-    }
-
-    function stake(
-        address tokenAddress,
-        uint256 tokenId
-    ) public ownsNFT(tokenAddress, tokenId) collectionSupported(tokenAddress) {
-        Collection(collections[tokenAddress]).stake(tokenId);
-    }
-
-    function unstake(
-        address tokenAddress,
-        uint256 tokenId
-    ) public ownsNFT(tokenAddress, tokenId) collectionSupported(tokenAddress) {
-        Collection(collections[tokenAddress]).unstake(tokenId);
-    }
+    function createCollection(address tokenAddress) public {        
+        // Collection child = new Collection(address(this), tokenAddress, lzEndpoint, curatorDelegate);
+        // collections[tokenAddress] = address(child);
+    }    
 
     function send(
         uint32 _dstEid,
@@ -73,4 +65,56 @@ contract Curator is OApp {
         address /*_executor*/,
         bytes calldata /*_extraData*/
     ) internal override {}
+
+
+    // Handle Sign Protocol events    
+     struct RoyaltyRights {
+        address tokenAddress;
+        uint256 tokenId;
+        address owner;
+        string signature;
+    }
+
+    // Receiving attestation means that the owner has the right to receive royalties
+    function didReceiveAttestation(
+        address attester,
+        uint64 schemaId,
+        uint64 attestationId,
+        bytes calldata extraData
+    ) external payable override {        
+        RoyaltyRights memory rights = abi.decode(extraData, (RoyaltyRights));
+        Collection collection = Collection(collections[rights.tokenAddress]);
+        collection.setRoyaltyRights(rights.tokenId, rights.owner, rights.signature);
+    }
+
+    function didReceiveAttestation(
+        address attester,
+        uint64, // schemaId
+        uint64 attestationId,
+        IERC20 resolverFeeERC20Token,
+        uint256 resolverFeeERC20Amount,
+        bytes calldata extraData
+    ) external override {}
+
+
+    // When an attestation is revoked, the owner loses the right to receive royalties
+    function didReceiveRevocation(
+        address attester,
+        uint64, // schemaId
+        uint64 attestationId,
+        bytes calldata extraData
+    ) external payable override {
+        RoyaltyRights memory rights = abi.decode(extraData, (RoyaltyRights));
+        Collection collection = Collection(collections[rights.tokenAddress]);
+        collection.revokeRoyaltyRights(rights.tokenId);
+    }
+
+    function didReceiveRevocation(
+        address attester,
+        uint64, // schemaId
+        uint64 attestationId,
+        IERC20 resolverFeeERC20Token,
+        uint256 resolverFeeERC20Amount,
+        bytes calldata extraData
+    ) external override {}
 }

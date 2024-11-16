@@ -7,6 +7,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
 import QueryProvider from './providers/QueryProvider';
+import MiniKitProvider from './minikit-provider';
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -20,8 +21,10 @@ declare module '@tanstack/react-router' {
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <QueryProvider>
-            <RouterProvider router={router} />
-        </QueryProvider>
+        <MiniKitProvider>
+            <QueryProvider>
+                <RouterProvider router={router} />
+            </QueryProvider>
+        </MiniKitProvider>
     </StrictMode>
 );

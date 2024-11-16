@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import { connectToDatabase } from './services/database.services';
 import bot from './bot';
+import { StoreHandler } from './services/operations/store';
 
 dotenv.config();
 
@@ -29,6 +30,8 @@ connectToDatabase()
         // Endpoints
 
         bot();
+
+        app.get('/filecoin/store/:cid', (req: Request, res: Response, next: NextFunction) => tryCatch(req, res, next, StoreHandler));
 
         app.listen(port, () => {
             console.log(`Server is running on port: ${port}`);

@@ -6,6 +6,7 @@ import { User } from "../models/user";
 import HandlerContext from "./context";
 import { createLogger } from "./logger";
 import { sleep } from "./utils";
+import { ContentTypeReply, Reply } from "@xmtp/content-type-reply";
 
 export default class Command {
     name: string;
@@ -19,6 +20,50 @@ export default class Command {
         this.logger = createLogger(true, "info", name, {
             name: name
         });
+    }
+
+    async processReplies(
+        message: DecodedMessage,
+        context?: WithId<User> | null | User,
+        override?:boolean
+    ): Promise<boolean> {
+        // Check if message is a reply
+        if (!message.contentType.sameAs(ContentTypeReply)) {
+            this.logger.warn(
+                { messageId: message.id },
+                "Message is not a reply. Expected a reply for this command."
+            );
+            return false;
+        }
+
+        const reply: Reply = message.content;
+
+        if (!reply?.content || typeof reply.content !== "string") {
+            this.logger.warn(
+                { messageId: message.id },
+                "Reply has no content or is not a string"
+            );
+            return false;
+        }
+
+        if (
+            !reply.content.toLowerCase().startsWith(this.name.toLowerCase()) &&
+            !override
+          ) {
+            return false;
+          }
+      
+          this.logger.info(
+            { messageId: message.id },
+            `Reply received: ${this.name}`
+          );
+          try {
+            await this.handler(new HandlerContext(message, context));
+          } catch (e) {
+            this.logger.error({ error: e }, "Error processing message");
+          }
+      
+          return true;
     }
 
     async processMessages(

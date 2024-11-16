@@ -13,6 +13,8 @@ import RegisterBot from "./operations/register";
 import DepositBot from "./operations/deposit";
 import SampleBot from "./operations/sample";
 import ListBot from "./operations/list";
+import { ReplyCodec } from "@xmtp/content-type-reply";
+import DownloadBot from "./operations/download";
 
 dotenv.config();
 
@@ -23,13 +25,15 @@ export default async function () {
     const provider = new JsonRpcProvider(process.env.POLYGON_AMOY_URL!);
     const signer = new Wallet(`0x${process.env.XMTP_KEY!}`, provider);
     const client = await Client.create(signer, { env: "production" });
+    client.registerCodec(new ReplyCodec());
 
     const logger =  createLogger(true, "info", "bot", {
         walletAddress: client.address
     });
 
     // Create array of commands that the bot can handle
-    const bots: Command[] = [InfoBot, BalanceBot, CategoriesBot, RegisterBot, DepositBot, SampleBot, ListBot];
+    const replyBots: Command[] = [DownloadBot];
+    const bots: Command[] = [InfoBot, BalanceBot, CategoriesBot, RegisterBot, DepositBot, SampleBot, ListBot, DownloadBot];
 
 
     // Stream all messages to test if setup works
@@ -65,7 +69,13 @@ export default async function () {
         
         for (const bot of bots) {
             console.log(message, context);
-            processed = await bot.processMessages(message, context);
+
+            if (replyBots.includes(bot)) {
+                processed = await bot.processReplies(message, context);
+            } else {
+                processed = await bot.processMessages(message, context);
+            }
+            
 
             if (processed) {
                 break;

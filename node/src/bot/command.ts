@@ -23,7 +23,7 @@ export default class Command {
 
     async processMessages(
         message: DecodedMessage,
-        context?: WithId<User> | null,
+        context?: WithId<User> | null | User,
         override?:boolean
     ): Promise<boolean> {
         // Check if message is valid

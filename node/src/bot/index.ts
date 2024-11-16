@@ -4,6 +4,11 @@ import { JsonRpcProvider, Wallet } from "ethers";
 import HandlerContext from "./context";
 import { createLogger } from "./logger";
 import Command from "./command";
+import InfoBot from "./operations/info";
+import { collections } from "../services/database.services";
+import { User } from "../models/user";
+import BalanceBot from "./operations/balance";
+import CategoriesBot from "./operations/categories";
 
 dotenv.config();
 
@@ -20,7 +25,7 @@ export default async function () {
     });
 
     // Create array of commands that the bot can handle
-    const bots: Command[] = [];
+    const bots: Command[] = [InfoBot, BalanceBot, CategoriesBot];
 
 
     // Stream all messages to test if setup works
@@ -40,5 +45,37 @@ export default async function () {
         const conversation = message.conversation;
 
         await conversation.send("Hello world");
+
+        // Test with dummy context
+        /*
+        await collections.users?.insertOne({
+            identityId: "test",
+            privateKey: "0xasdadsa",
+            address: "0x5a1F594CA236A8938CADAd6616AAb9A164A1fDFD",
+        });
+        */
+
+        console.log(`0x${message.senderAddress.replace("0x", "")}`);
+
+        const context = await collections.users?.findOne<User>({
+            address: `0x${message.senderAddress.replace("0x", "")}`,
+        });
+        
+        for (const bot of bots) {
+            console.log(message, context);
+            processed = await bot.processMessages(message, context);
+
+            if (processed) {
+                break;
+            }
+        }
+
+        if (!processed) {
+            processed = await InfoBot.processMessages(message, context, true);
+        }
     }
+
+    return {
+        bots
+    };
 }

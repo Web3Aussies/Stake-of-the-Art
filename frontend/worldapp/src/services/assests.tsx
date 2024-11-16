@@ -6,6 +6,7 @@ export type Asset = {
     title: string;
     filename: string;
     imageUrl: string;
+    category: string;
 };
 
 const keys = {

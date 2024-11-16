@@ -31,43 +31,16 @@ const Categories = ({ data, clearCat, onHandleSelect, type = 'Category' }: Categ
         onHandleSelect?.(updatedCategories);
     };
 
-    // const categories = data?.map((cat, index) => {
-    //     return (
-    //         <>
-    //             {type === 'Color' ? (
-    //                 <Button
-    //                     key={cat.name}
-    //                     // style={{ backgroundColor: cat.name }}
-    //                     onClick={() => handleClick(cat)}
-    //                     size="lg"
-    //                     className={clsx(styles.colorButton)}
-    //                 >
-    //                     {' '}
-    //                 </Button>
-    //             ) : (
-    //                 <Button
-    //                     key={cat.name}
-    //                     onClick={() => handleClick(cat)}
-    //                     size="xs"
-    //                     className={clsx(styles.categoryButton)}
-    //                 >
-    //                     {cat.name}
-    //                 </Button>
-    //             )}
-    //         </>
-    //     );
-    // });
-
     return (
         <div className={clsx('flex max-w-md flex-row gap-4 overflow-x-auto px-2', styles.container)}>
-            <Button.Group className="mx-2">
+            <Button.Group className={clsx("", type === "Category" ? "gap-2" : "gap-4")}>
                 {data.map((b) => (
                     <Button
                         key={b.name}
                         style={b.type == 'Color' ? { backgroundColor: b.name } : {}}
                         onClick={() => handleClick(b)}
                         size="xl"
-                        className='text-nowrap'
+                        className='text-nowrap rounded-md'
                         // className={clsx(' text-nowrap', styles.colorButton)}
 
                     >

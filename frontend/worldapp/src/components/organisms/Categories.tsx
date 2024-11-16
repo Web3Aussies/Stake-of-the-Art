@@ -31,7 +31,7 @@ const Categories = ({ data, clearCat, onHandleSelect, type = "Category" }: Categ
     onHandleSelect?.(updatedCategories);
   };
 
-  const categories = data.map((cat, index) => {
+  const categories = data?.map((cat, index) => {
     return (
       <>
         {type === "Color" ?

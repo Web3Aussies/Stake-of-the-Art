@@ -43,15 +43,16 @@ export function useAssets() {
         width,
     }: {
         keyword?: string;
-        categories?: Category[];
+        categories?: string;
         height?: number;
         width?: number;
     }): UseQueryOptions<SearchResult<Asset>> => ({
         queryKey: [keys.search, keyword, categories,  height ?? 400, width ?? 400],
         queryFn: async ({ queryKey }) => {
-            const [_, height, width] = queryKey;
+            const [_, keyword, categories, height, width] = queryKey;
+            console.log('getting data...', queryKey);
 
-            const res = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/app/assets?height=${height}&width=${width}&keyword=${keyword}&categories=${categories?.join(",")}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/app/assets?height=${height}&width=${width}&keyword=${keyword}&categories=${categories}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

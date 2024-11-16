@@ -10,7 +10,7 @@ const HomePage = () => {
     const [keyword, setKeyword] = useState<string>();
     const { SearchQuery, GetCategoriesQuery } = useAssets();
     const { data: categories } = useQuery(GetCategoriesQuery());
-    const { data } = useQuery(SearchQuery({keyword: keyword, categories: selectedCategories}));
+    const { data } = useQuery(SearchQuery({keyword: keyword, categories: selectedCategories?.map(cat => cat.name).join(",")}));
 
     const updateSearch = (categories: Category[], keyword: string) => {
         console.log('search = ', categories);
@@ -29,7 +29,7 @@ const HomePage = () => {
             }
             {data && (
                 <div className="grid grid-flow-row grid-cols-2 gap-4">
-                    {data.results.map((i) => (
+                    {data.results?.map((i) => (
                         <Link to="/image/$id" params={{ id: i.id }}>
                             <Card
                                 key={i.id}

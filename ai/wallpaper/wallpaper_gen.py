@@ -3,6 +3,11 @@ import requests
 import time
 from dotenv import load_dotenv
 
+def generate_and_save_image(filename, prompt):
+    image_result = generate_image(prompt)
+    if image_result is not None:
+        save_image_from_url(filename, image_result)
+
 def generate_image(prompt):
 
     # Load environment variables from .env file
@@ -82,5 +87,4 @@ def ensure_unique_file_name(folder_path, file_extension, base_filename):
 
     return f"{base_filename}_{counter}{file_extension}"
 
-wallpaper_url = generate_image("A giant rocket blasting off into space. Multi colored smoke fills the sky around it.")
-save_image_from_url("rocket", wallpaper_url)
+generate_and_save_image("vector_landscape", "A vector art landscape, with a sunset and sun in the center. Bold and flat colors. The colors are psychedelic and vibrant. Dark and rich in front layers and pastel towards the background")

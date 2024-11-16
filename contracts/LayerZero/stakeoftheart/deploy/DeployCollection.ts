@@ -37,7 +37,8 @@ const deploy: DeployFunction = async (hre) => {
     const { address } = await deploy(contractName, {
         from: deployer,
         args: [
-            "0x9e1F2c3432ddCe2AAe0f605f38e3234EE6fbC91a",
+            "0x3c649A7A063c067555a089967FCB16CC1dC44Ad4", // Curator
+            "0x9e1F2c3432ddCe2AAe0f605f38e3234EE6fbC91a", // Token
             endpointV2Deployment.address, // LayerZero's EndpointV2 address
             deployer, // owner
         ],

@@ -13,6 +13,7 @@ public interface IRepository
     ModelSet<Category> Categories { get; }
     ModelSet<Nonce> Nonces { get; }
     ModelSet<Download> Downloads { get; }
+    ModelSet<Share> Shares { get; }
     TModel? Get<TModel>(string id, bool forTenant = false) where TModel : class, new();
     string? GetLoggedInUserId();
     UserDto? GetLoggedInUserDto();
@@ -33,6 +34,7 @@ public class Repository : IRepository
         Categories = new(database, "categories");
         Nonces = new(database, "nonces");
         Downloads = new(database, "downloads");
+        Shares = new(database, "shares");
     }
 
     public ModelSet<User> Users { get; }
@@ -40,6 +42,7 @@ public class Repository : IRepository
     public ModelSet<Category> Categories { get; }
     public ModelSet<Nonce> Nonces { get; }
     public ModelSet<Download> Downloads { get; }
+    public ModelSet<Share> Shares { get; }
 
     public TModel? Get<TModel>(string id, bool forTenant = false) where TModel : class, new()
     {

@@ -6,6 +6,7 @@ using Serilog;
 using StakingArt.Infrastructure.Masstransit;
 using StakingArt.Infrastructure.Mongodb;
 using StakingArt.Infrastructure.OpenAI;
+using StakingArt.Infrastructure.Pinata;
 using StakingArt.Infrastructure.Security;
 using StakingArt.Infrastructure.Storage;
 using StakingArt.Infrastructure.Swagger;
@@ -70,6 +71,9 @@ builder.ConfigureMasstransit();
 
 // openai
 builder.ConfigureOpenAI();
+
+//configure pinata
+builder.ConfigurePinata();
 
 // services
 builder.Services.AddScoped<IRepository, Repository>();

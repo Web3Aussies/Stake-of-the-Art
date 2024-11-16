@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 import { NodeSSH } from "node-ssh";
 import dotenv from "dotenv";
+import getCurrentEpoch from "../utils/getCurrentEpoch";
 
 export type StoreResponse = {
     cid: string,
     dealUUID: string,
-    storageProvider: string
+    storageProvider: string,
+    dealStatus: string
 }
 
 export const StoreHandler = async (req: Request, res: Response) => {
@@ -58,21 +60,74 @@ export const StoreHandler = async (req: Request, res: Response) => {
             console.log(carCid);
         });
 
+        let commpCid = "";
+        let carSize = "";
+        let pieceSize = "";
 
         // Get car file details for deal
-        
+        await ssh.execCommand(`boostx commp ./${cid}.car`).then((result: any) => {
+            console.log(result);
 
+            let stringSplit = result.stdout.split("\n");
+
+            commpCid = stringSplit[0].split("  ")[1];
+            pieceSize = stringSplit[1].split("  ")[1];
+            carSize = stringSplit[2].split("  ")[1];
+
+            console.log(commpCid, pieceSize, carSize);
+        });
+
+        const rpcUrl = process.env.FILECOIN_RPC_URL;
+
+        // Calculate epoch time
+        const currentEpoch = getCurrentEpoch();
+        
+        console.log("Current Epoch:", currentEpoch);
+
+        let dealUuid = "";
 
         // Send deal on to storage provider
-        /*await ssh.execCommand("export FULLNODE_API_INFO=https://api.calibration.node.glif.io", { cwd: "/var/www" }).then(result => {
+        await ssh.execCommand(`export FULLNODE_API_INFO=${rpcUrl} && boost -vv deal --verified=false \
+            --start-epoch=${currentEpoch + 2880} \
+            --duration=${process.env.FILECOIN_STORAGE_DURATION} \
+            --storage-price=${process.env.FILECOIN_STORAGE_PRICE} \
+            --provider=${process.env.FILECOIN_STORAGE_PROVIDER} \
+            --http-url=https://${process.env.GATEWAY_URL}/${carCid} \
+            --commp=${commpCid} \
+            --car-size=${carSize} \
+            --piece-size=${pieceSize} \
+            --payload-cid=${cid}`).then((result: any) => {
+            console.log(result);
+            
+            let stringSplit = result.stdout.split("\n");
 
-        }); */
+            console.log(stringSplit);
 
-        // Delete files
+            dealUuid = stringSplit[1].trim().split(" ")[2];
 
+            console.log(dealUuid);
+        });
 
-        // boost deal-status --provider=t017840 --deal-uuid=
+        let storeResponse: StoreResponse = {
+            dealStatus: "",
+            dealUUID: dealUuid,
+            storageProvider: process.env.FILECOIN_STORAGE_PROVIDER!,
+            cid: cid
+        }
 
-        //
+        // Get deal-status
+        await ssh.execCommand(`export FULLNODE_API_INFO=${rpcUrl} && boost deal-status \
+        --provider=${process.env.FILECOIN_STORAGE_PROVIDER} \
+        --deal-uuid=${dealUuid}`).then((result) => {
+            console.log(result);
+
+            let stringSplit = result.stdout.split("\n");
+
+            storeResponse.dealStatus = stringSplit[2].split("deal status: ")[1];
+
+            console.log(storeResponse.dealStatus);
+        });
+
+        return storeResponse;
     })
 }

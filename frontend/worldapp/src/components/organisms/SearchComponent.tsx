@@ -24,7 +24,7 @@ const SearchComponent = ({ colorsData, categoriesData, handleSearch }: SearchCom
 
   useEffect(() => {
     doSearch();
-  }, [selectedColors, selectedCategories]);
+  }, [keyword, selectedColors, selectedCategories]);
 
   const hansleColorChange = (cat: Category[]) => {
     setSelectedColors(cat);
@@ -35,6 +35,7 @@ const SearchComponent = ({ colorsData, categoriesData, handleSearch }: SearchCom
   }
 
   const handleKeywordSearch = (text: string) => {
+    console.log('searching text: ', text);
     setKeyword(text);
     if (text.length > 2) {
     }

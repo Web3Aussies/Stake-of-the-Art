@@ -37,16 +37,21 @@ export function useAssets() {
     const { token } = useRouteContext({ strict: false });
 
     const SearchQuery = ({
+        keyword,
+        categories,
         height,
         width,
     }: {
+        keyword?: string;
+        categories?: Category[];
         height?: number;
         width?: number;
     }): UseQueryOptions<SearchResult<Asset>> => ({
-        queryKey: [keys.search, height ?? 400, width ?? 400],
+        queryKey: [keys.search, keyword, categories,  height ?? 400, width ?? 400],
         queryFn: async ({ queryKey }) => {
             const [_, height, width] = queryKey;
-            const res = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/app/assets?height=${height}&width=${width}`, {
+
+            const res = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/app/assets?height=${height}&width=${width}&keyword=${keyword}&categories=${categories?.join(",")}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -56,7 +61,7 @@ export function useAssets() {
         },
     });
 
-    const GetCategoriesQuery = (): UseQueryOptions<SearchResult<Asset>> => ({
+    const GetCategoriesQuery = (): UseQueryOptions<SearchResult<Category>> => ({
         queryKey: [keys.search],
         queryFn: async ({ queryKey }) => {
             const [_] = queryKey;

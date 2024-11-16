@@ -2,7 +2,18 @@
 
 }
 
-.category {
+.colorButton {
+  /* border-width: 1px;
+  border-color: brown;
+  width: 16px;
+  height: 16px; */
+  /* padding: 10px; */
+  /* background-color: white; */
+}
+
+.categoryButton {
   padding: 10px;
-  background-color: white;
+  border-radius: 10;
+  border-color: "#e5e5e5";
+
 }

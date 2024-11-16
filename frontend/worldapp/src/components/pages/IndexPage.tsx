@@ -1,16 +1,32 @@
-import { useAssets } from '@/services/assests';
+import { Category, useAssets } from '@/services/assests';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { Card } from 'flowbite-react';
+import SearchComponent from '../organisms/SearchComponent';
+import { useState } from 'react';
 
 const HomePage = () => {
-    const { SearchQuery } = useAssets();
+    const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
+    const [keyword, setKeyword] = useState<string>();
+    const { SearchQuery, GetCategoriesQuery } = useAssets();
+    const { data: categories } = useQuery(GetCategoriesQuery());
+    const { data } = useQuery(SearchQuery({keyword: keyword, categories: selectedCategories}));
 
-    const { data } = useQuery(SearchQuery({}));
+    const updateSearch = (categories: Category[], keyword: string) => {
+        console.log('search = ', categories);
+        setSelectedCategories(categories);
+        setKeyword(keyword);
+    }
 
     return (
         <div className="p-2">
-            <h3>Home</h3>
+            {categories && (
+                <SearchComponent
+                    colorsData={categories.results.filter(cat => cat.type === "Color")}
+                    categoriesData={categories.results.filter(cat => cat.type === "Category")}
+                    handleSearch={updateSearch}
+                />)
+            }
             {data && (
                 <div className="grid grid-flow-row grid-cols-2 gap-4">
                     {data.results.map((i) => (

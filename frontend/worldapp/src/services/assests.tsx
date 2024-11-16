@@ -1,4 +1,5 @@
 import { UseQueryOptions } from "@tanstack/react-query";
+import { useRouteContext } from "@tanstack/react-router";
 
 export type Asset = {
   id: string;
@@ -31,7 +32,9 @@ export type LikeRequest = {
   Height: number;
 }
 
-export function useAssets({ token }: { token?: string }) {
+export function useAssets() {
+  const { token } = useRouteContext({ strict: false });
+
   const SearchQuery = ({
     height,
     width,

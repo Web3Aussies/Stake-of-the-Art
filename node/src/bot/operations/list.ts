@@ -66,6 +66,17 @@ async function handle({ message, context }: HandlerContext) {
 
     const wallpapers: Array<WallpaperResponse> = await response.json();
 
+    // Let the user know what they searched for
+    await conversation.send(wallpaperRequest.categories!.length != 0 ?
+        `You searched for ${wallpaperRequest.total} wallpaper${wallpaperRequest.total != 1 ?
+        "s" : ""} in the categor${wallpaperRequest.categories!.length == 1 ?
+        "y" : "ies"}: ${wallpaperRequest.categories?.join(",")}\nFound ${wallpapers.length} wallpaper${wallpapers.length != 1 ?
+        "s" : "" } in these categories.` :
+        `You searched for ${wallpaperRequest.total} wallpaper${wallpaperRequest.total != 1 ?
+        "s" : "" } across all categories.\nFound ${wallpapers.length} wallpaper${wallpapers.length != 1 ?
+        "s" : "" }.`
+    );
+
     // Loop over wallpapers to display them one by one
     for (var i = 0; i < wallpapers.length; i++) {
         let url = wallpapers[i].imageUrl;

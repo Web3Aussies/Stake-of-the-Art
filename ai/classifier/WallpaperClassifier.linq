@@ -39,29 +39,39 @@ string ClassifyImage(string imageFilePath, string promptFilePath)
 	ChatCompletionOptions options = new()
 	{
 		ResponseFormat = ChatResponseFormat.CreateJsonSchemaFormat(
-    jsonSchemaFormatName: "image_classification",
-    jsonSchema: BinaryData.FromBytes("""
-        {
-            "type": "object",
-            "properties": {
-                "categories": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "name": { "type": "string" },
-                            "score": { "type": "integer" }
-                        },
-                        "required": ["name", "score"],
-                        "additionalProperties": false
-                    }
-                }
-            },
-            "required": ["categories"],
-            "additionalProperties": false
-        }
-        """u8.ToArray()),
-	jsonSchemaIsStrict: true),
+			jsonSchemaFormatName: "image_classification",
+			jsonSchema: BinaryData.FromBytes("""
+	            {
+	                "type": "object",
+	                "properties": {
+	                    "description": { "type": "string" },
+	                    "categories": {
+	                        "type": "array",
+	                        "items": {
+	                            "type": "object",
+	                            "properties": {
+	                                "name": { "type": "string" },
+	                                "score": { "type": "integer" }
+	                            },
+	                            "required": ["name", "score"],
+	                            "additionalProperties": false
+	                        }
+	                    },
+	                    "color": {
+	                        "type": "object",
+	                        "properties": {
+	                            "name": { "type": "string" },
+	                            "score": { "type": "integer" }
+	                        },
+	                        "required": ["name", "score"],
+	                        "additionalProperties": false
+	                    }
+	                },
+	                "required": ["description", "categories", "color"],
+	                "additionalProperties": false
+	            }
+	            """u8.ToArray()),
+			jsonSchemaIsStrict: true),
 		Temperature = 0
 	};
 

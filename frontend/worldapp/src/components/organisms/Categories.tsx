@@ -35,7 +35,7 @@ const Categories = ({ data, clearCat, onHandleSelect, type = "Category" }: Categ
     return (
       <>
         {type === "Color" ?
-          <Button onClick={() => handleClick(cat)} size="xs" className={styles.colorButton}></Button>
+          <Button onClick={() => handleClick(cat)} size="xs" className={clsx(styles.colorButton)} ></Button>
           :
           <Button onClick={() => handleClick(cat)} size="xs">{cat.name}</Button>}
       </>

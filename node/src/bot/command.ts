@@ -24,7 +24,7 @@ export default class Command {
 
     async processReplies(
         message: DecodedMessage,
-        context?: WithId<User> | null | User,
+        context?: WithId<User> | null,
         override?:boolean
     ): Promise<boolean> {
         // Check if message is a reply
@@ -68,7 +68,7 @@ export default class Command {
 
     async processMessages(
         message: DecodedMessage,
-        context?: WithId<User> | null | User,
+        context?: WithId<User> | null,
         override?:boolean
     ): Promise<boolean> {
         // Check if message is valid

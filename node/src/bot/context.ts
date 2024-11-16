@@ -10,9 +10,9 @@ type PreparedReply = {
 
 export default class HandlerContext {
     message: DecodedMessage;
-    context?: WithId<User> | null | User;
+    context?: WithId<User> | null;
 
-    constructor (message: DecodedMessage, context?: WithId<User> | null | User) {
+    constructor (message: DecodedMessage, context?: WithId<User> | null) {
         this.message = message;
         this.context = context;
     }

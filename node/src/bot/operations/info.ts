@@ -4,15 +4,14 @@ import HandlerContext from "../context";
 async function handle({ message, context }: HandlerContext) {
     const conversation = message.conversation;
 
-    // Check if no context
-    if (!context) {
-        console.log("Issue getting user context.");
+    if (context) {
+        await conversation.send("Welcome back");
         return;
     }
 
-    if (context) {
-        await conversation.send("Hi welcome to Stake of the art.");
-    }
+    await conversation.send(
+        `Welcome to Stake of the Art`
+    );
 
     return;
 }

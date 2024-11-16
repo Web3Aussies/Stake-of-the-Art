@@ -14,12 +14,16 @@ Category List (and examples in brackets)
 ----------------
 
 Nature
+Sky
 Space
 Animals
-Abstract (patterns, geometric, tribal, shapes, lines, textures)
+Underwater
+Abstract
+Minimalist
 Digital Art
 Artistic
 Street Art
+Vintage & Retro
 Sci-fi
 Digital
 Sports
@@ -27,14 +31,23 @@ Vehicles
 Anime & Cartoons
 Movies & TV
 Seasonal & Holidays
-Colors
+Quotes & Typography
+Solid Colors
+Food & Drink
+Travel
+Black & White
 Fantasy
+Religious & Spiritual
 Music
 Gaming
 Macro
 Architecture
+Celebrities
+Fashion
 Science
+Health & Wellness
 Money & Wealth
+Love & Romance
 
 ----------------
 Color Group List
@@ -50,3 +63,4 @@ Pink
 Brown
 Black
 White
+Gray

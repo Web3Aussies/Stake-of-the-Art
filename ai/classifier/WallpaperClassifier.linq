@@ -14,7 +14,7 @@ void Main()
 {
 	MyExtensions.SetEnvironmentVariables();
 	
-	ClassifyImage(@"C:\Users\chris\Core\EthGlobal\Stake-of-the-Art\ai\wallpaper\images\Good\abstract.jpg", @"C:\Users\chris\Core\EthGlobal\Stake-of-the-Art\ai\classifier\prompt.txt");
+	ClassifyImage(@"C:\Users\chris\Core\EthGlobal\Stake-of-the-Art\ai\wallpaper\images\Good\drip_paint.jpg", @"C:\Users\chris\Core\EthGlobal\Stake-of-the-Art\ai\classifier\prompt.txt");
 }
 
 // You can define other methods, fields, classes and namespaces here

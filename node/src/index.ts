@@ -4,6 +4,7 @@ import cors from 'cors';
 import { connectToDatabase } from './services/database.services';
 import bot from './bot';
 import { StoreHandler } from './services/operations/store';
+import MintHandler from './services/operations/mint';
 
 dotenv.config();
 
@@ -32,6 +33,8 @@ connectToDatabase()
         bot();
 
         app.get('/filecoin/store/:cid', (req: Request, res: Response, next: NextFunction) => tryCatch(req, res, next, StoreHandler));
+
+        app.post('/chain/mint', (req: Request, res: Response, next: NextFunction) => tryCatch(req, res, next, MintHandler));
 
         app.listen(port, () => {
             console.log(`Server is running on port: ${port}`);

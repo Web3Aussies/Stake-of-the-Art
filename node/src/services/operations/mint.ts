@@ -29,10 +29,12 @@ export type MintResponse = {
 export default async function MintHandler( req: Request, res: Response ) {
     const request: MintRequest = req.body;
 
+    console.log(request);
+
     const pinata = new PinataSDK({
         pinataJwt: process.env.PINATA_JWT,
         pinataGateway: process.env.GATEWAY_URL
-    })
+    });
 
     // Create metadata file
     const metadata: NFTMetadata = {
@@ -43,7 +45,9 @@ export default async function MintHandler( req: Request, res: Response ) {
 
     // Attach metadata to pinata file
     const metaBlob = new Blob([JSON.stringify(metadata)]);
-    const metaFile = new File([metaBlob], `${request.imageCid}.json`, { type: "text/json" })
+
+    const metaFile = new File([metaBlob], `${request.imageCid}.json`, { type: "text/json" });
+
     const metaUpload: PinResponse = await pinata.upload.file(metaFile);
 
     console.log(metaUpload);

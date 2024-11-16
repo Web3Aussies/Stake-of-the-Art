@@ -6,6 +6,12 @@ import { polygonAmoy } from "viem/chains";
 
 dotenv.config();
 
+export type TransactionData = {
+    to: `0x${string}`,
+    data: `0x${string}`,
+    gas: bigint
+}
+
 export default async function MintToken(metadata: PinResponse, creatorAddress: `0x${string}`) {
     const contractAbi = parseAbi([
         // Replace with the actual ABI of the safeMint function
@@ -14,14 +20,15 @@ export default async function MintToken(metadata: PinResponse, creatorAddress: `
 
     try {
         // Define the transaction data
-        const transactionData = {
-            to: process.env.NFT_CONTRACT_ADDRESS!,
+        const transactionData: TransactionData = {
+            to: `0x${process.env.NFT_CONTRACT_ADDRESS}`,
             data: encodeFunctionData({
                 abi: contractAbi,
                 functionName: "safeMint",
                 args: [creatorAddress,
                     metadata.IpfsHash],
             }),
+            gas: BigInt(30000)
         };
 
         const privateKey = process.env.WALLET_PRIVATE_KEY;
@@ -33,7 +40,7 @@ export default async function MintToken(metadata: PinResponse, creatorAddress: `
         });
 
         // Send the transaction
-        const transactionHash = await walletClient.sendTransaction(transactionData as SendTransactionParameters);
+        const transactionHash = await walletClient.sendTransaction(transactionData);
         console.log(`Transaction sent! Hash: ${transactionHash}`);
 
         // Wait for the transaction to be minted

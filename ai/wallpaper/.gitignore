@@ -1,1 +1,22 @@
-/venv/
+# Virtual environments
+venv/
+.venv/
+
+# Compiled files
+*.pyc
+*.pyo
+__pycache__/
+
+# Editor settings
+.vscode/
+.idea/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# OS-specific
+.DS_Store
+thumbs.db

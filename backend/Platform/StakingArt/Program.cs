@@ -5,6 +5,7 @@ using Newtonsoft.Json.Converters;
 using Serilog;
 using StakingArt.Infrastructure.Masstransit;
 using StakingArt.Infrastructure.Mongodb;
+using StakingArt.Infrastructure.OpenAI;
 using StakingArt.Infrastructure.Security;
 using StakingArt.Infrastructure.Storage;
 using StakingArt.Infrastructure.Swagger;
@@ -67,6 +68,8 @@ ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;
 //masstransit
 builder.ConfigureMasstransit();
 
+// openai
+builder.ConfigureOpenAI();
 
 // services
 builder.Services.AddScoped<IRepository, Repository>();

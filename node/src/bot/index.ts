@@ -1,8 +1,11 @@
 import { Client } from "@xmtp/xmtp-js";
 import dotenv from "dotenv";
 import { JsonRpcProvider, Wallet } from "ethers";
+import HandlerContext from "./context";
 
 dotenv.config();
+
+export type BotHandler = (ctx: HandlerContext) => Promise<void>;
 
 export default async function () {
     // Setup XMTP client

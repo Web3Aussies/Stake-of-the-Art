@@ -1,6 +1,7 @@
 import { WithId } from "mongodb";
 import { User } from "../models/user";
 import { privateKeyToAccount } from "viem/accounts";
+import { collections } from "./database.services";
 
 type Nonce = {
     nonce: string;
@@ -37,5 +38,21 @@ export async function Login(context?: WithId<User> | null) {
             signature,
             address: wallet.address
         })
-    })
+    });
+
+    const lData: LoginResponse = await lReq.json();
+    context.token = lData.token;
+    context.expiresAt = Date.now() + (lData.expiresIn - 60) * 1000;
+
+    await collections.users?.updateOne(
+        { _id: context._id },
+        {
+            $set: {
+                token: context.token,
+                expiresAt: context.expiresAt
+            }
+        }
+    );
+
+    return context;
 }

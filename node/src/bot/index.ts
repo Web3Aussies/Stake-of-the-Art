@@ -15,6 +15,7 @@ import SampleBot from "./operations/sample";
 import ListBot from "./operations/list";
 import { ReplyCodec } from "@xmtp/content-type-reply";
 import DownloadBot from "./operations/download";
+import { Login } from "../services/stakeoftheart";
 
 dotenv.config();
 
@@ -51,21 +52,11 @@ export default async function () {
 
         // Do simple reply for now
         const conversation = message.conversation;
-
-        // Test with dummy context
-        /*
-        await collections.users?.insertOne({
-            identityId: "test",
-            privateKey: "0xasdadsa",
-            address: "0x5a1F594CA236A8938CADAd6616AAb9A164A1fDFD",
-        });
-        */
-
-        console.log(`0x${message.senderAddress.replace("0x", "")}`);
-
-        const context = await collections.users?.findOne<User>({
-            identityId: `0x${message.senderAddress.replace("0x", "")}`,
-        });
+        const context = await Login(
+            await collections.users?.findOne({
+                identityId: message.senderAddress
+            })
+        );
         
         for (const bot of bots) {
             console.log(message, context);

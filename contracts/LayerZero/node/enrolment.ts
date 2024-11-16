@@ -18,11 +18,11 @@ const rpcUrl = process.env.RPC_URL || "";
 
 
 const dstEid = 40161; // Sepolia
-const collectionAddress = "0x3c8Ff373DC7b6A5f25cC8867B77CF4d651dF1106"; // Replace with your contract address
+const collectionAddress = "0x1D90CF406A5393f89bEC835dA560b6E031F01D0e"; // Replace with your contract address
 const collection = JSON.parse(fs.readFileSync("./Collection.json", "utf-8"));
 const privateKey = process.env.PRIVATE_KEY || "";
 const account = privateKeyToAccount(privateKey);
-const galleryAddress = "0xE3eE56B8102457D43beb87fbcC54eeE732E5a3Fc"; // Replace with your contract address
+// const galleryAddress = "0xE3eE56B8102457D43beb87fbcC54eeE732E5a3Fc"; // Replace with your contract address
 
 // Initialize public client
 const publicClient = createPublicClient({
@@ -72,7 +72,7 @@ async function main() {
     address: collectionAddress,
     abi: collection.abi, // Use ABI from the Foundry JSON file
     functionName: "quoteEnrolment",
-    args: [2],
+    args: [dstEid, 2],
   });
 
   console.log("Quote Result:", quoteResult);
@@ -80,8 +80,8 @@ async function main() {
   const sendTx = await walletClient.writeContract({
     address: collectionAddress,
     abi: collection.abi,
-    functionName: "notifyEnrollment",
-    args: [2],
+    functionName: "notifyEnrolment",
+    args: [dstEid, 2],
     value: quoteResult.nativeFee,
   });
 

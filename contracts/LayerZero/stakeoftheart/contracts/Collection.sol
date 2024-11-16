@@ -25,16 +25,16 @@ contract Collection is ONFT721Adapter {
     mapping(uint256 => RoyaltyRights) public rights;
 
     constructor(
-        uint32 _galleryEid,
-        address _galleryAddress,
+        // uint32 _galleryEid,
+        // address _galleryAddress,
         address _curator,
         address _token,
         address _lzEndpoint,
         address _delegate
     ) ONFT721Adapter(_token, _lzEndpoint, _delegate) {
-        setPeer(_galleryEid, addressToBytes32(_galleryAddress));
+        // setPeer(_galleryEid, addressToBytes32(_galleryAddress));
         tokenAddress = _token;
-        galleryEid = _galleryEid;
+        // galleryEid = _galleryEid;
         curator = _curator;
         lzEndpoint = _lzEndpoint;
         delegate = _delegate;
@@ -81,31 +81,37 @@ contract Collection is ONFT721Adapter {
     struct Enrolment {
         address tokenAddress;
         uint256 tokenId;
+        string imageUri;
+        address rightsHolder;
     }
 
-    function quoteEnrolment(uint256 tokenId) public view returns (MessagingFee memory) {
+    function quoteEnrolment(uint32 _eid, uint256 _tokenId) public view returns (MessagingFee memory) {
         // Notify the gallery of the enrollment
-        bytes memory message = abi.encode(Enrolment(tokenAddress, tokenId));
+        Enrolment memory enrolment = Enrolment(tokenAddress, _tokenId, "test", msg.sender);
+        bytes memory message = abi.encode(enrolment);
 
-        bytes memory options = OptionsBuilder
-            .newOptions()
-            .addExecutorLzReceiveOption(200000, 0)
-            .addExecutorLzComposeOption(0, 500000, 0);
+        bytes memory options = OptionsBuilder.newOptions().addExecutorLzReceiveOption(200000, 0);
 
-        // Get quote
-        return _quote(galleryEid, message, options, false);
+        // return MessagingFee(0,0);
+        return _quote(_eid, message, options, false);
     }
 
-    function notifyEnrollment(uint256 tokenId) public payable{
+    function checkPeer(uint32 eId) public view returns (bytes32) {
+        return _getPeerOrRevert(eId);
+    }
+
+
+    struct Test {
+        string greeting;
+    }
+    function notifyEnrolment(uint32 _eid, uint256 _tokenId) public payable {
         // Notify the gallery of the enrollment
-        bytes memory message = abi.encode(Enrolment(tokenAddress, tokenId));
+        // Enrolment memory enrolment = Enrolment(tokenAddress, _tokenId, "test", msg.sender);
+        // bytes memory message = abi.encode(enrolment);
+        bytes memory message = abi.encode(Test("Hello"));
+        bytes memory options = OptionsBuilder.newOptions().addExecutorLzReceiveOption(200000, 0);
 
-        bytes memory options = OptionsBuilder
-            .newOptions()
-            .addExecutorLzReceiveOption(200000, 0)
-            .addExecutorLzComposeOption(0, 500000, 0);
-
-        _lzSend(galleryEid, message, options, MessagingFee(msg.value, 0),msg.sender);                
+        _lzSend(_eid, message, options, MessagingFee(msg.value, 0), msg.sender);
     }
 
     function addressToBytes32(address _addr) internal pure returns (bytes32) {

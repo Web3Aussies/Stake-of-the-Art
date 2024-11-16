@@ -14,18 +14,17 @@ contract Gallery is ONFT721 {
     constructor(
         address _lzEndpoint,
         address _delegate
-    ) ONFT721("Stake of the Art", "SOTA", _lzEndpoint, _delegate) {
-                
-    }    
+    ) ONFT721("Stake of the Art", "SOTA", _lzEndpoint, _delegate) {}
 
-    struct Exhibit {
+    struct Enrolment {
         address tokenAddress;
         uint256 tokenId;
         string imageUri;
         address rightsHolder;
     }
 
-    event ExhibitCreated(uint256 indexed exhibitId, address indexed owner, string title, string description, string imageUri, uint256 price);
+    event EnrolmentCreated(address indexed tokenAddress, address indexed rightsHolder, uint256 tokenId, string imageUri, uint256 timestamp);
+    uint32 public counter = 0;
 
     /**
      * @dev Internal function to handle the receive on the LayerZero endpoint.
@@ -44,9 +43,18 @@ contract Gallery is ONFT721 {
         bytes calldata _message,
         address /*_executor*/, // @dev unused in the default implementation.
         bytes calldata _extraData // @dev unused in the default implementation.
-    ) internal virtual override {
+    ) internal virtual override {  
+
+        counter += 1;
+        // Enrolment memory _enrolment = abi.decode(_message, (Enrolment));      
+
         // Decode into Exhibit
-        Exhibit memory exhibit = abi.decode(_extraData, (Exhibit));
-        emit ExhibitCreated(exhibit.tokenId, exhibit.rightsHolder, "", "", exhibit.imageUri, 0);
+        // Enrolment memory exhibit = abi.decode(_extraData, (Enrolment));How do you like a milky tiger
+        // emit EnrolmentCreated(exhibit.tokenAddress, exhibit.rightsHolder, uint32(exhibit.tokenId), exhibit.imageUri, block.timestamp);
+        // emit EnrolmentCreated(_enrolment.tokenAddress, _enrolment.rightsHolder, _enrolment.tokenId, _enrolment.imageUri, uint256(block.timestamp));
+    }
+
+    function ping() public {
+        counter += 1;
     }
 }

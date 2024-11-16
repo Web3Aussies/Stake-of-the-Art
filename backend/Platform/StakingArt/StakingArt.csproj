@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+	  <PackageReference Include="Amazon.Lambda.S3Events" Version="3.1.0" />
 	  <PackageReference Include="Ardalis.Result.AspNetCore" Version="10.0.0" />
 	  <PackageReference Include="Ardalis.Result.FluentValidation" Version="10.0.0" />
 	  <PackageReference Include="Auth0.AuthenticationApi" Version="7.27.0" />
@@ -19,6 +20,10 @@
 	  <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
 	  <PackageReference Include="LazyCache" Version="2.4.0" />
 	  <PackageReference Include="LazyCache.AspNetCore" Version="2.4.0" />
+	  <PackageReference Include="MassTransit" Version="8.3.0" />
+	  <PackageReference Include="MassTransit.AmazonSQS" Version="8.3.0" />
+	  <PackageReference Include="MassTransit.Newtonsoft" Version="8.3.0" />
+	  <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.0" />
 	  <PackageReference Include="MediatR" Version="12.4.1" />
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
 	  <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.10" />

@@ -16,6 +16,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AppImport } from './routes/app'
 import { Route as AppIndexImport } from './routes/app/index'
 import { Route as AppOnboardingImport } from './routes/app/onboarding'
+import { Route as AppAssetsNewImport } from './routes/app/assets/new'
 
 // Create Virtual Routes
 
@@ -44,6 +45,12 @@ const AppIndexRoute = AppIndexImport.update({
 const AppOnboardingRoute = AppOnboardingImport.update({
   id: '/onboarding',
   path: '/onboarding',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppAssetsNewRoute = AppAssetsNewImport.update({
+  id: '/assets/new',
+  path: '/assets/new',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -79,6 +86,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexImport
       parentRoute: typeof AppImport
     }
+    '/app/assets/new': {
+      id: '/app/assets/new'
+      path: '/assets/new'
+      fullPath: '/app/assets/new'
+      preLoaderRoute: typeof AppAssetsNewImport
+      parentRoute: typeof AppImport
+    }
   }
 }
 
@@ -87,11 +101,13 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppOnboardingRoute: typeof AppOnboardingRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppAssetsNewRoute: typeof AppAssetsNewRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppOnboardingRoute: AppOnboardingRoute,
   AppIndexRoute: AppIndexRoute,
+  AppAssetsNewRoute: AppAssetsNewRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -101,12 +117,14 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteWithChildren
   '/app/onboarding': typeof AppOnboardingRoute
   '/app/': typeof AppIndexRoute
+  '/app/assets/new': typeof AppAssetsNewRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/app/onboarding': typeof AppOnboardingRoute
   '/app': typeof AppIndexRoute
+  '/app/assets/new': typeof AppAssetsNewRoute
 }
 
 export interface FileRoutesById {
@@ -115,14 +133,21 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/app/onboarding': typeof AppOnboardingRoute
   '/app/': typeof AppIndexRoute
+  '/app/assets/new': typeof AppAssetsNewRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app' | '/app/onboarding' | '/app/'
+  fullPaths: '/' | '/app' | '/app/onboarding' | '/app/' | '/app/assets/new'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app/onboarding' | '/app'
-  id: '__root__' | '/' | '/app' | '/app/onboarding' | '/app/'
+  to: '/' | '/app/onboarding' | '/app' | '/app/assets/new'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/app/onboarding'
+    | '/app/'
+    | '/app/assets/new'
   fileRoutesById: FileRoutesById
 }
 
@@ -157,7 +182,8 @@ export const routeTree = rootRoute
       "filePath": "app.tsx",
       "children": [
         "/app/onboarding",
-        "/app/"
+        "/app/",
+        "/app/assets/new"
       ]
     },
     "/app/onboarding": {
@@ -166,6 +192,10 @@ export const routeTree = rootRoute
     },
     "/app/": {
       "filePath": "app/index.tsx",
+      "parent": "/app"
+    },
+    "/app/assets/new": {
+      "filePath": "app/assets/new.tsx",
       "parent": "/app"
     }
   }

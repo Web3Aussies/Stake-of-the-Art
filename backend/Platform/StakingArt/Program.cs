@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Converters;
 using Serilog;
+using StakingArt.Infrastructure.Masstransit;
 using StakingArt.Infrastructure.Mongodb;
 using StakingArt.Infrastructure.Security;
 using StakingArt.Infrastructure.Storage;
@@ -62,6 +63,10 @@ builder.ConfigureWorldCoin();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 ValidatorOptions.Global.DefaultClassLevelCascadeMode = CascadeMode.Continue;
 ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;
+
+//masstransit
+builder.ConfigureMasstransit();
+
 
 // services
 builder.Services.AddScoped<IRepository, Repository>();

@@ -18,7 +18,7 @@ const rpcUrl = process.env.RPC_URL || "";
 
 
 const dstEid = 40161; // Sepolia
-const collectionAddress = "0x1D90CF406A5393f89bEC835dA560b6E031F01D0e"; // Replace with your contract address
+const collectionAddress = "0x9e33Fd5810b49CD51E2599B9F062649cD4A1A4E3"; // Replace with your contract address
 const collection = JSON.parse(fs.readFileSync("./Collection.json", "utf-8"));
 const privateKey = process.env.PRIVATE_KEY || "";
 const account = privateKeyToAccount(privateKey);

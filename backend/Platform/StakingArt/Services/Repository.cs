@@ -12,6 +12,7 @@ public interface IRepository
     ModelSet<Asset> Assets { get; }
     ModelSet<Category> Categories { get; }
     ModelSet<Nonce> Nonces { get; }
+    ModelSet<Download> Downloads { get; }
     TModel? Get<TModel>(string id, bool forTenant = false) where TModel : class, new();
     string? GetLoggedInUserId();
     UserDto? GetLoggedInUserDto();
@@ -31,12 +32,14 @@ public class Repository : IRepository
         Assets = new(database, "assets");
         Categories = new(database, "categories");
         Nonces = new(database, "nonces");
+        Downloads = new(database, "downloads");
     }
 
     public ModelSet<User> Users { get; }
     public ModelSet<Asset> Assets { get; }
     public ModelSet<Category> Categories { get; }
     public ModelSet<Nonce> Nonces { get; }
+    public ModelSet<Download> Downloads { get; }
 
     public TModel? Get<TModel>(string id, bool forTenant = false) where TModel : class, new()
     {

@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: white;
+  overflow: hidden;
+  position: fixed;
+  top: 40px;
+  padding-bottom: 16px;
+}

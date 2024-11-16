@@ -12,7 +12,7 @@ export default function PublicLayout() {
     <div className="flex min-h-svh flex-col bg-gray-50 antialiased dark:bg-gray-900">
       {/* TODO: Header */}
 
-      <main className="container mx-auto flex-grow pb-4 pt-4 text-gray-500 dark:text-gray-400">
+      <main className="container mx-auto flex-grow pb-4 text-gray-500 dark:text-gray-400">
         <Outlet />
       </main>
       <BottomNavbar />
@@ -23,7 +23,7 @@ export default function PublicLayout() {
     <Suspense>
       <TanStackRouterDevtools />
       <ReactQueryDevtools initialIsOpen={false} />
-      </Suspense>
+    </Suspense>
     </Flowbite>
   );
 }

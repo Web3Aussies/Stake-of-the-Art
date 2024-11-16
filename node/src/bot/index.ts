@@ -9,6 +9,7 @@ import { collections } from "../services/database.services";
 import { User } from "../models/user";
 import BalanceBot from "./operations/balance";
 import CategoriesBot from "./operations/categories";
+import RegisterBot from "./operations/register";
 
 dotenv.config();
 
@@ -25,7 +26,7 @@ export default async function () {
     });
 
     // Create array of commands that the bot can handle
-    const bots: Command[] = [InfoBot, BalanceBot, CategoriesBot];
+    const bots: Command[] = [InfoBot, BalanceBot, CategoriesBot, RegisterBot];
 
 
     // Stream all messages to test if setup works
@@ -44,8 +45,6 @@ export default async function () {
         // Do simple reply for now
         const conversation = message.conversation;
 
-        await conversation.send("Hello world");
-
         // Test with dummy context
         /*
         await collections.users?.insertOne({
@@ -58,7 +57,7 @@ export default async function () {
         console.log(`0x${message.senderAddress.replace("0x", "")}`);
 
         const context = await collections.users?.findOne<User>({
-            address: `0x${message.senderAddress.replace("0x", "")}`,
+            identityId: `0x${message.senderAddress.replace("0x", "")}`,
         });
         
         for (const bot of bots) {

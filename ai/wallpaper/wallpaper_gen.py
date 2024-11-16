@@ -50,8 +50,9 @@ def save_image_from_url(filename, image_url):
     # Specify the folder where you want to save the image
     folder_path = '.\images' 
     file_extension = '.jpg'
-    filename = filename + file_extension
-    image_path = os.path.join(folder_path, filename)
+    base_filename = filename
+    file_name = ensure_unique_file_name(folder_path, file_extension, base_filename)
+    image_path = os.path.join(folder_path, file_name)
     
     # Ensure the folder exists
     os.makedirs(folder_path, exist_ok=True)
@@ -67,5 +68,19 @@ def save_image_from_url(filename, image_url):
     else:
         print(f"Failed to download image. Status code: {response.status_code}")
 
-wallpaper_url = generate_image("A rocket blasting off into space. Thick plumes of fire and smoke trail behind it as it ascends into the sky.")
+def ensure_unique_file_name(folder_path, file_extension, base_filename):
+    file_path = os.path.join(folder_path, f"{base_filename}{file_extension}")
+
+    if os.path.exists(file_path) == False:
+        return f"{base_filename}{file_extension}"
+
+    # Check if file exists, and if so, create a new name with a suffix
+    counter = 1
+    while os.path.exists(file_path):
+        file_path = os.path.join(folder_path, f"{base_filename}_{counter}{file_extension}")
+        counter += 1
+
+    return f"{base_filename}_{counter}{file_extension}"
+
+wallpaper_url = generate_image("A giant rocket blasting off into space. Multi colored smoke fills the sky around it.")
 save_image_from_url("rocket", wallpaper_url)

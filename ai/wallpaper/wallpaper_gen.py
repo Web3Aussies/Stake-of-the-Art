@@ -86,5 +86,3 @@ def ensure_unique_file_name(folder_path, file_extension, base_filename):
         counter += 1
 
     return f"{base_filename}_{counter}{file_extension}"
-
-generate_and_save_image("vector_landscape", "A vector art landscape, with a sunset and sun in the center. Bold and flat colors. The colors are psychedelic and vibrant. Dark and rich in front layers and pastel towards the background")

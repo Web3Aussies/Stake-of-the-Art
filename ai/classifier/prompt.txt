@@ -13,41 +13,41 @@ Only use categories and colors from the provided lists. Make sure the categories
 Category List (and examples in brackets)
 ----------------
 
-Nature
-Sky
-Space
-Animals
-Underwater
-Abstract
-Minimalist
-Digital Art
-Artistic
-Street Art
-Vintage & Retro
-Sci-fi
-Digital
-Sports
-Vehicles
-Anime & Cartoons
-Movies & TV
-Seasonal & Holidays
-Quotes & Typography
-Solid Colors
-Food & Drink
-Travel
-Black & White
-Fantasy
-Religious & Spiritual
-Music
-Gaming
-Macro
-Architecture
-Celebrities
-Fashion
-Science
-Health & Wellness
-Money & Wealth
-Love & Romance
+Nature (mountains, beaches, forests, flowers, trees, gardens, storms, rainbows, clouds)
+Sky (sunsets)
+Space (stars, galaxies, space exploration)
+Animals (wildlife, pets)
+Underwater (oceans, marine scenes, marine animals)
+Abstract (patterns, geometric, tribal, shapes, lines, textures)
+Minimalist (simple designs, clean aesthetics)
+Digital Art (modern, computer-generated)
+Artistic (classic and contemporary paintings, Handrawn and digital illustrations, Surreal)
+Street Art (graffiti, murals)
+Vintage & Retro (nostalgic designs, old-school styles)
+Sci-fi (futuristic space vehicles and tech, robots, sci-fi themes, advanced concepts, cyberpunk)
+Digital (tech motifs, circuitry)
+Sports (specific Sports like football and basketball, sporting equipment, athletes, sporting arenas and venues)
+Vehicles (cars, motocycles, airplanes, boats)
+Anime & Cartoons (popular series, characters, classic and modern cartoons)
+Movies & TV (iconic characters, memorable movie and tv scenes, popular movie and tv IP)
+Seasonal & Holidays (christmas, halloween, summer, winter, spring, fall, easter and thanksgiving)
+Quotes & Typography (inspirational, motivational, funny, quotes, other text)
+Solid Colors (simple designs and monochrome)
+Food & Drink (culinary photography, beverages, fruis and vegetables)
+Travel (famous landmarks, cities, skylines and urban life)
+Black & White (monochromatic images, contrast focused design)
+Fantasy (mythical creatures, magic & enchantment, fantasy landscapes)
+Religious & Spiritual (symbols, crosses, spiritual imagery)
+Music (instruments, musicians & bands, concert scenes)
+Gaming (video game characters and scenes, esports, retro games and consoles)
+Macro (close-up photography)
+Architecture (Historic building, modern architecture, bridges and structures)
+Celebrities (actors & actresses, public figures)
+Fashion (runway styles, street fashion, style accessories)
+Science (biology, chemistry and physics concepts)
+Health & Wellness (yoga, meditation, healthy lifestyle imagery)
+Money & Wealth (currency, investment assets, glamorous living)
+Love & Romance (elements or scenes of romance or love)
 
 ----------------
 Color Group List

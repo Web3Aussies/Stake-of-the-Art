@@ -10,7 +10,7 @@ const HomePage = () => {
     const [keyword, setKeyword] = useState<string>();
     const { SearchQuery, GetCategoriesQuery } = useAssets();
     const { data: categories } = useQuery(GetCategoriesQuery());
-    const { data } = useQuery(SearchQuery({keyword: keyword, categories: selectedCategories?.map(cat => cat.name).join(",")}));
+    const { data, isPending } = useQuery(SearchQuery({keyword: keyword, categories: selectedCategories?.map(cat => cat.name).join(",")}));
 
     const updateSearch = (categories: Category[], keyword: string) => {
         console.log('search = ', categories);
@@ -37,9 +37,7 @@ const HomePage = () => {
                                 imgAlt={i.title}
                                 imgSrc={`https://assets.displayz.app${i.imageUrl}`}
                             >
-                                <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                    {i.title}
-                                </h5>
+                                {i.category}
                             </Card>
                         </Link>
                     ))}

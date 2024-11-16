@@ -1,4 +1,4 @@
-import { UseQueryOptions } from '@tanstack/react-query';
+import { useMutation, UseQueryOptions } from '@tanstack/react-query';
 import { useRouteContext } from '@tanstack/react-router';
 
 export type Asset = {
@@ -118,24 +118,47 @@ export function useAssets() {
         },
     });
 
-    const GetAsset = ({ id }: { id: string }): UseQueryOptions<Asset> => ({
-        queryKey: [keys.get, id],
+    const GetAsset = ({
+        id,
+        height,
+        width,
+    }: {
+        id: string;
+        height?: number;
+        width?: number;
+    }): UseQueryOptions<Asset> => ({
+        queryKey: [keys.get, id, height ?? 400, width ?? 400],
         queryFn: async ({ queryKey }) => {
-            const [_, id] = queryKey;
-            const res = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/app/assets/${id}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            const [_, id, height, width] = queryKey;
+            const res = await fetch(
+                `${import.meta.env.VITE_API_ENDPOINT}/app/assets/${id}?height=${height}&width=${width}`,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
 
             const data = await res.json();
             return data;
         },
     });
 
+    const getDownloadLink = async (id: string) => {
+        const res = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/app/assets/${id}/download`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const data: string = await res.text();
+        return data;
+    };
+
     return {
         SearchQuery,
         GetCategoriesQuery,
         LikedQuery,
         UnLikedQuery,
-        GetAsset
+        GetAsset,
+        getDownloadLink
     };
 }

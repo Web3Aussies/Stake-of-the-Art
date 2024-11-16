@@ -13,13 +13,21 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AppImport } from './routes/app'
 import { Route as AppIndexImport } from './routes/app/index'
+import { Route as AppOnboardingImport } from './routes/app/onboarding'
 
 // Create Virtual Routes
 
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
+
+const AppRoute = AppImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexLazyRoute = IndexLazyImport.update({
   id: '/',
@@ -28,9 +36,15 @@ const IndexLazyRoute = IndexLazyImport.update({
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
 const AppIndexRoute = AppIndexImport.update({
-  id: '/app/',
-  path: '/app/',
-  getParentRoute: () => rootRoute,
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppOnboardingRoute = AppOnboardingImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AppRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -44,51 +58,82 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/app/': {
-      id: '/app/'
+    '/app': {
+      id: '/app'
       path: '/app'
       fullPath: '/app'
-      preLoaderRoute: typeof AppIndexImport
+      preLoaderRoute: typeof AppImport
       parentRoute: typeof rootRoute
+    }
+    '/app/onboarding': {
+      id: '/app/onboarding'
+      path: '/onboarding'
+      fullPath: '/app/onboarding'
+      preLoaderRoute: typeof AppOnboardingImport
+      parentRoute: typeof AppImport
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexImport
+      parentRoute: typeof AppImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface AppRouteChildren {
+  AppOnboardingRoute: typeof AppOnboardingRoute
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppOnboardingRoute: AppOnboardingRoute,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
-  '/app': typeof AppIndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/app/onboarding': typeof AppOnboardingRoute
+  '/app/': typeof AppIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
+  '/app/onboarding': typeof AppOnboardingRoute
   '/app': typeof AppIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
+  '/app': typeof AppRouteWithChildren
+  '/app/onboarding': typeof AppOnboardingRoute
   '/app/': typeof AppIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app'
+  fullPaths: '/' | '/app' | '/app/onboarding' | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app'
-  id: '__root__' | '/' | '/app/'
+  to: '/' | '/app/onboarding' | '/app'
+  id: '__root__' | '/' | '/app' | '/app/onboarding' | '/app/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
-  AppIndexRoute: typeof AppIndexRoute
+  AppRoute: typeof AppRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
-  AppIndexRoute: AppIndexRoute,
+  AppRoute: AppRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -102,14 +147,26 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/app/"
+        "/app"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
     },
+    "/app": {
+      "filePath": "app.tsx",
+      "children": [
+        "/app/onboarding",
+        "/app/"
+      ]
+    },
+    "/app/onboarding": {
+      "filePath": "app/onboarding.tsx",
+      "parent": "/app"
+    },
     "/app/": {
-      "filePath": "app/index.tsx"
+      "filePath": "app/index.tsx",
+      "parent": "/app"
     }
   }
 }

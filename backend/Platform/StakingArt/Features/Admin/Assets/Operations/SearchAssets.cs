@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using StakingArt.Features.Admin.Assets.Shared;
 using StakingArt.Features.Shared;
+using StakingArt.Models;
 using StakingArt.Services;
 
 namespace StakingArt.Features.Admin.Assets.Operations;
@@ -30,6 +31,8 @@ public class SearchAssetsHandler : IRequestHandler<SearchAssets, Result<SearchRe
         var filter = _repository.Assets.Filter;
         var filters = filter.Eq(x => x.UserId, _repository.GetLoggedInUserId());
 
+        // filter out any pending assets
+        filters &= filter.Ne(x => x.Status, FileStatus.Pending);
 
         var (result, total) = await _repository.Assets.Search(
             filters,

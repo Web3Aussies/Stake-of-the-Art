@@ -1,4 +1,5 @@
 using Ardalis.Result.AspNetCore;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Converters;
 using Serilog;
@@ -57,6 +58,10 @@ builder.ConfigureAmazonS3();
 builder.ConfigureWorldCoin();
 
 
+// fluent validator settings
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+ValidatorOptions.Global.DefaultClassLevelCascadeMode = CascadeMode.Continue;
+ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;
 
 // services
 builder.Services.AddScoped<IRepository, Repository>();

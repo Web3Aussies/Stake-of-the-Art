@@ -20,5 +20,10 @@ public class AccountsController(IMediator mediator) : ControllerBase
     [ExpectedFailures(ResultStatus.Ok)]
     public Task<Result<MeResponse>> GetMe(GetMe request) => mediator.Send(request);
 
+    [HttpPost]
+    [TranslateResultToActionResult]
+    [ExpectedFailures(ResultStatus.Invalid, ResultStatus.NotFound)]
+    public Task<Result<MeResponse>> UpdateProfile([FromBody] UpdateProfile request) => mediator.Send(request);
+
 }
 

@@ -17,6 +17,7 @@ import { Route as AppImport } from './routes/app'
 import { Route as AppIndexImport } from './routes/app/index'
 import { Route as AppOnboardingImport } from './routes/app/onboarding'
 import { Route as AppAssetsNewImport } from './routes/app/assets/new'
+import { Route as AppAssetsIdSignImport } from './routes/app/assets/$id/sign'
 
 // Create Virtual Routes
 
@@ -51,6 +52,12 @@ const AppOnboardingRoute = AppOnboardingImport.update({
 const AppAssetsNewRoute = AppAssetsNewImport.update({
   id: '/assets/new',
   path: '/assets/new',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppAssetsIdSignRoute = AppAssetsIdSignImport.update({
+  id: '/assets/$id/sign',
+  path: '/assets/$id/sign',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -93,6 +100,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAssetsNewImport
       parentRoute: typeof AppImport
     }
+    '/app/assets/$id/sign': {
+      id: '/app/assets/$id/sign'
+      path: '/assets/$id/sign'
+      fullPath: '/app/assets/$id/sign'
+      preLoaderRoute: typeof AppAssetsIdSignImport
+      parentRoute: typeof AppImport
+    }
   }
 }
 
@@ -102,12 +116,14 @@ interface AppRouteChildren {
   AppOnboardingRoute: typeof AppOnboardingRoute
   AppIndexRoute: typeof AppIndexRoute
   AppAssetsNewRoute: typeof AppAssetsNewRoute
+  AppAssetsIdSignRoute: typeof AppAssetsIdSignRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppOnboardingRoute: AppOnboardingRoute,
   AppIndexRoute: AppIndexRoute,
   AppAssetsNewRoute: AppAssetsNewRoute,
+  AppAssetsIdSignRoute: AppAssetsIdSignRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -118,6 +134,7 @@ export interface FileRoutesByFullPath {
   '/app/onboarding': typeof AppOnboardingRoute
   '/app/': typeof AppIndexRoute
   '/app/assets/new': typeof AppAssetsNewRoute
+  '/app/assets/$id/sign': typeof AppAssetsIdSignRoute
 }
 
 export interface FileRoutesByTo {
@@ -125,6 +142,7 @@ export interface FileRoutesByTo {
   '/app/onboarding': typeof AppOnboardingRoute
   '/app': typeof AppIndexRoute
   '/app/assets/new': typeof AppAssetsNewRoute
+  '/app/assets/$id/sign': typeof AppAssetsIdSignRoute
 }
 
 export interface FileRoutesById {
@@ -134,13 +152,25 @@ export interface FileRoutesById {
   '/app/onboarding': typeof AppOnboardingRoute
   '/app/': typeof AppIndexRoute
   '/app/assets/new': typeof AppAssetsNewRoute
+  '/app/assets/$id/sign': typeof AppAssetsIdSignRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app' | '/app/onboarding' | '/app/' | '/app/assets/new'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/app/onboarding'
+    | '/app/'
+    | '/app/assets/new'
+    | '/app/assets/$id/sign'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app/onboarding' | '/app' | '/app/assets/new'
+  to:
+    | '/'
+    | '/app/onboarding'
+    | '/app'
+    | '/app/assets/new'
+    | '/app/assets/$id/sign'
   id:
     | '__root__'
     | '/'
@@ -148,6 +178,7 @@ export interface FileRouteTypes {
     | '/app/onboarding'
     | '/app/'
     | '/app/assets/new'
+    | '/app/assets/$id/sign'
   fileRoutesById: FileRoutesById
 }
 
@@ -183,7 +214,8 @@ export const routeTree = rootRoute
       "children": [
         "/app/onboarding",
         "/app/",
-        "/app/assets/new"
+        "/app/assets/new",
+        "/app/assets/$id/sign"
       ]
     },
     "/app/onboarding": {
@@ -196,6 +228,10 @@ export const routeTree = rootRoute
     },
     "/app/assets/new": {
       "filePath": "app/assets/new.tsx",
+      "parent": "/app"
+    },
+    "/app/assets/$id/sign": {
+      "filePath": "app/assets/$id/sign.tsx",
       "parent": "/app"
     }
   }

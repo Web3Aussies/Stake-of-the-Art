@@ -36,7 +36,7 @@ export default function NewWallpaperPage() {
         if (file) {
             var assetId = await mutateAsync({ file });
             if (assetId) {
-                //TODO: sign the assetId
+                navigate({ to: '/app/assets/$id/sign', params: { id: assetId } });
             }
         }
     };

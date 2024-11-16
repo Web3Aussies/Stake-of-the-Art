@@ -30,4 +30,9 @@ public class AssetsController(IMediator mediator) : ControllerBase
     [ExpectedFailures(ResultStatus.NotFound)]
     public Task<Result<AssetResponse>> GetAsset(GetAsset request) => mediator.Send(request);
 
+    [HttpPost("{AssetId}/sign")]
+    [TranslateResultToActionResult]
+    [ExpectedFailures(ResultStatus.NotFound)]
+    public Task<Result> Sign(SignAsset request) => mediator.Send(request);
+
 }

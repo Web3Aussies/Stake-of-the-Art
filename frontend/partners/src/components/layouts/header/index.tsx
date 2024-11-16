@@ -15,7 +15,8 @@ export function Header() {
         <header>
             <Navbar className="border-b border-gray-200 bg-white px-4 py-2.5 dark:border-gray-700 dark:bg-gray-800">
                 <Navbar.Brand as={Link} to={isAuthenticated ? '/app' : '/'}>
-                    <img src="/logo.svg" className="mr-3 h-6 sm:h-9" alt="Stake of the Art Logo" />
+                    <img src="/logo.svg" className="mr-3 h-6 sm:h-9 dark:hidden" alt="Stake of the Art Logo" />
+                    <img src="/logo_dark.svg" className="mr-3 h-6 sm:h-9 hidden dark:block" alt="Stake of the Art Logo" />
                     <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
                         Staking Art
                     </span>

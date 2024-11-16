@@ -1,10 +1,19 @@
 import Command from "../command";
 import HandlerContext from "../context";
+import dotenv from "dotenv";
 
-export type GetCategories = {
-    categories: {
-        name: string
-    }[],
+dotenv.config();
+
+export type CategoriesResponse = {
+    results: [
+        {
+            name: string,
+            type: number
+        }
+    ],
+    totalRecords: number,
+    page: number,
+    limit: number
 }
 
 async function handle({ message, context }: HandlerContext) {
@@ -15,23 +24,19 @@ async function handle({ message, context }: HandlerContext) {
     }
 
     // API endpoint to get catgories
-    // const response = await fetch(`${asset_endpoint}`)
+    const response = await fetch(`${process.env.DOTNET_ENDPOINT_URL}/app/categories?Page=1&Limit=8`, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${context!.token}`
+        }
+    });
 
-    const categories: GetCategories = {
-        categories: [
-            {
-                name: "Fantasy"
-            },
-            {
-                name: "Digital Art"
-            }
-        ]
-    };
+    const categories: CategoriesResponse = await response.json();
 
     await conversation.send("Categories:");
 
-    for (var i = 0; i < categories.categories.length; i++) {
-        await conversation.send(`${i+1}. ${categories.categories[i].name}`);
+    for (var i = 0; i < categories.results.length; i++) {
+        await conversation.send(`${i+1}. ${categories.results[i].name}`);
     }
 }
 

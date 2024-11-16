@@ -9,6 +9,8 @@ namespace StakingArt.Services;
 public interface IRepository
 {
     ModelSet<User> Users { get; }
+    ModelSet<Asset> Assets { get; }
+    ModelSet<Category> Categories { get; }
     TModel? Get<TModel>(string id, bool forTenant = false) where TModel : class, new();
     string? GetLoggedInUserId();
     UserDto? GetLoggedInUserDto();
@@ -25,11 +27,14 @@ public class Repository : IRepository
         var database = client.GetDatabase(dbOptions.DatabaseName);
 
         Users = new(database, "users");
-
+        Assets = new(database, "assets");
+        Categories = new(database, "categories");
     }
 
     public ModelSet<User> Users { get; }
-
+    public ModelSet<Asset> Assets { get; }
+    public ModelSet<Category> Categories { get; }
+    
     public TModel? Get<TModel>(string id, bool forTenant = false) where TModel : class, new()
     {
         if (forTenant)

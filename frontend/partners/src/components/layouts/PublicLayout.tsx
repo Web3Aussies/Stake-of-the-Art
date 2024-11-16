@@ -3,13 +3,14 @@ import { Suspense } from 'react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { Flowbite, Footer } from 'flowbite-react';
-
+import { Header } from './header';
 
 export default function PublicLayout() {
     return (
         <Flowbite>
             <div className="flex min-h-svh flex-col bg-gray-50 antialiased dark:bg-gray-900">
-                
+                <Header />
+
                 <main className="container mx-auto flex-grow pb-4 pt-4 text-gray-500 dark:text-gray-400">
                     <Outlet />
                 </main>

@@ -60,21 +60,25 @@ contract Gallery is ONFT721 {
             _enrolment.metadataUri,
             uint256(block.timestamp)
         );
-        enrol(_enrolment);
+
+        if (_enrolment.created) {
+            enrol(_enrolment, _origin.srcEid);
+        } else {
+            disenrol(_enrolment, _origin.srcEid);
+        }
     }
 
-    function enrol(Enrolment memory _enrolment) internal {
-        _mint(_enrolment.rightsHolder, counter);
-
+    function enrol(Enrolment memory _enrolment, uint32 _srcEid) internal {
+        _credit(_enrolment.rightsHolder, counter, _srcEid);
         bytes32 key = getEnrolmentKey(_enrolment);
         gallery[counter] = _enrolment;
         enrolmentId[key] = counter;
         counter += 1;
     }
 
-    function disenrol(Enrolment memory _enrolment) internal {
+    function disenrol(Enrolment memory _enrolment, uint32 _srcEid) internal {
         uint256 _tokenId = enrolmentId[getEnrolmentKey(_enrolment)];
-        _burn(_tokenId);
+        _debit(_enrolment.rightsHolder, _tokenId, _srcEid);
     }
 
     function getEnrolmentKey(Enrolment memory _enrolment) internal pure returns (bytes32) {
@@ -82,7 +86,6 @@ contract Gallery is ONFT721 {
     }
 
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-        return gallery[tokenId].metadataUri;        
+        return gallery[tokenId].metadataUri;
     }
-
 }

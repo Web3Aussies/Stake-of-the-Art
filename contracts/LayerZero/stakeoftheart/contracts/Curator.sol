@@ -16,7 +16,7 @@ import { DataLocation } from "@ethsign/sign-protocol-evm/src/models/DataLocation
 import { ISPHook } from "@ethsign/sign-protocol-evm/src/interfaces/ISPHook.sol";
 
 contract Curator is OApp, ISPHook {
-    address public galleryAdd ress;
+    address public galleryAddress;
     address public lzEndpoint;
     address public curatorDelegate;
 
@@ -34,9 +34,8 @@ contract Curator is OApp, ISPHook {
 
     constructor(address _endpoint, address _delegate) OApp(_endpoint, _delegate) Ownable(_delegate) {}
 
-    function createCollection(address tokenAddress) public {        
-        // Collection child = new Collection(address(this), tokenAddress, lzEndpoint, curatorDelegate);
-        // collections[tokenAddress] = address(child);
+    function supportToken(address tokenAddress, address collectionAddress) public {                
+        collections[tokenAddress] = collectionAddress;
     }    
 
     function send(

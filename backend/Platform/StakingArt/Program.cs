@@ -4,7 +4,9 @@ using Newtonsoft.Json.Converters;
 using Serilog;
 using StakingArt.Infrastructure.Mongodb;
 using StakingArt.Infrastructure.Security;
+using StakingArt.Infrastructure.Storage;
 using StakingArt.Infrastructure.Swagger;
+using StakingArt.Infrastructure.WorldCoin;
 using StakingArt.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,9 +17,6 @@ builder.Host.UseSerilog((context, configuration) =>
 {
     configuration.ReadFrom.Configuration(context.Configuration);
 });
-
-// Add services to the container.
-
 
 builder.Services.AddControllers(opt =>
     {
@@ -51,9 +50,20 @@ builder.ConfigureMangoDb();
 builder.ConfigureAuthentication();
 builder.ConfigureAuth0();
 
+// configure amazon
+builder.ConfigureAmazonS3();
+
+//world coin
+builder.ConfigureWorldCoin();
+
+
+
 // services
 builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddSingleton<IStorageService, S3StorageService>();
+builder.Services.AddSingleton<ImageService>();
+builder.Services.AddScoped<IWorldCoinService, WorldCoinService>();
 
 var app = builder.Build();
 

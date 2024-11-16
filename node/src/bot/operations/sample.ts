@@ -8,6 +8,11 @@ dotenv.config();
 async function handle({ message, context }: HandlerContext) {
     const conversation = message.conversation;
 
+    if (!context) {
+        await conversation.send("Please register before seeing our sample wallpaper. It's free and its super easy!");
+        return;
+    }
+
     // Fetch the sample image
     await conversation.send(`This a sample of our art:`);
     

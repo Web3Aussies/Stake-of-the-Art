@@ -10,14 +10,14 @@ async function handle({ message, context }: HandlerContext) {
 - type 'deposit' to deposit funds
 - type 'list # [categories]' to see the top # wallpapers in different categories
 - type 'categories' to see wallpaper categories
-- reply 'download' to a wallpaper to download`);
+- reply 'download' to a wallpaper to download
+- type 'sample' to see a sample of the art collection`);
         return;
     }
 
     await conversation.send(
         `Welcome to Stake of the Art.
-        - type 'register' to open an account
-        - type 'sample' to see a sample of the art collection`
+        - type 'register' to open an account`
     );
 
     return;

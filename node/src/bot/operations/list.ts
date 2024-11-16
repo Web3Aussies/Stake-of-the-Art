@@ -1,3 +1,4 @@
+import { CreateImageAttachment } from "../../services/operations/createImageAttachment";
 import Command from "../command";
 import HandlerContext from "../context";
 import dotenv from "dotenv";
@@ -81,9 +82,21 @@ async function handle({ message, context }: HandlerContext) {
     for (var i = 0; i < wallpapers.length; i++) {
         let url = wallpapers[i].imageUrl;
 
-        if (url) {
-            await conversation.send(`Wallpaper ${i+1}:${wallpapers[i].title ? " " + wallpapers[i].title : ""}`);
-            await conversation.send(`${process.env.WALLPAPER_CDN}${wallpapers[i].imageUrl}`);
+        if (url) {    
+            let attachmentMessage = await CreateImageAttachment(process.env.WALLPAPER_CDN + url, context);
+
+            await conversation.send(`Wallpaper ${i+1}:`);
+            
+            //console.log(attachmentMessage);
+
+            try {
+                await conversation.send(attachmentMessage?.attachment, {
+                    contentType: attachmentMessage?.contentType
+                });
+            } catch (err: any) {
+                console.log(err);
+                break;
+            }
         }
     }
 }

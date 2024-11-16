@@ -1,5 +1,6 @@
 import { Category, useAssets } from '@/services/assests';
 import { useQuery } from '@tanstack/react-query';
+import { Link } from '@tanstack/react-router';
 import { Card } from 'flowbite-react';
 import SearchComponent from '../organisms/SearchComponent';
 import { useState } from 'react';
@@ -29,16 +30,18 @@ const HomePage = () => {
             {data && (
                 <div className="grid grid-flow-row grid-cols-2 gap-4">
                     {data.results.map((i) => (
-                        <Card
-                            key={i.id}
-                            className="max-w-sm"
-                            imgAlt={i.title}
-                            imgSrc={`https://assets.displayz.app${i.imageUrl}`}
-                        >
-                            <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                {i.title}
-                            </h5>
-                        </Card>
+                        <Link to="/image/$id" params={{ id: i.id }}>
+                            <Card
+                                key={i.id}
+                                className="max-w-sm"
+                                imgAlt={i.title}
+                                imgSrc={`https://assets.displayz.app${i.imageUrl}`}
+                            >
+                                <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                    {i.title}
+                                </h5>
+                            </Card>
+                        </Link>
                     ))}
                 </div>
             )}

@@ -35,7 +35,12 @@ async function handle({ message, context }: HandlerContext) {
 
     console.log("Original Message: ", originalMessage);
 
+    // Check if original message is content type remote attachment
+
     // Get download link from backend using original message
+    
+    // Send download message
+    
 }
 
 const DownloadBot = new Command("download", handle);

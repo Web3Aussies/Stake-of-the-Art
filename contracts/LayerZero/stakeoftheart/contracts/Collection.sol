@@ -81,13 +81,14 @@ contract Collection is ONFT721Adapter {
     struct Enrolment {
         address tokenAddress;
         uint256 tokenId;
-        string imageUri;
+        string metadataUri;
         address rightsHolder;
+        bool created;
     }
 
     function quoteEnrolment(uint32 _eid, uint256 _tokenId) public view returns (MessagingFee memory) {
         // Notify the gallery of the enrollment
-        Enrolment memory enrolment = Enrolment(tokenAddress, _tokenId, "test", msg.sender);
+        Enrolment memory enrolment = Enrolment(tokenAddress, _tokenId, "test", msg.sender, true);
         bytes memory message = abi.encode(enrolment);
 
         bytes memory options = OptionsBuilder.newOptions().addExecutorLzReceiveOption(200000, 0);
@@ -102,20 +103,20 @@ contract Collection is ONFT721Adapter {
 
     function notifyEnrolment(uint32 _eid, uint256 _tokenId) public payable {
         // Notify the gallery of the enrollment
-        bytes memory message = encodeStruct(tokenAddress, _tokenId, "test", msg.sender);
+        bytes memory message = encodeStruct(tokenAddress, _tokenId, "test", msg.sender, true);
         bytes memory options = OptionsBuilder.newOptions().addExecutorLzReceiveOption(200000, 0);
 
         _lzSend(_eid, message, options, MessagingFee(msg.value, 0), msg.sender);
     }
 
     function encodeStruct(
-        address tokenAddress,
-        uint256 tokenId,
-        string memory imageUri,
-        address rightsHolder
+        address _tokenAddress,
+        uint256 _tokenId,
+        string memory _metadataUri,
+        address _rightsHolder,
+        bool _created
     ) internal pure returns (bytes memory) {
-        Enrolment memory myStruct = Enrolment(tokenAddress, tokenId, imageUri, rightsHolder);
-
+        Enrolment memory myStruct = Enrolment(_tokenAddress, _tokenId, _metadataUri, _rightsHolder, _created);
         return abi.encode(myStruct);
     }
 

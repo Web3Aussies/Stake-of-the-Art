@@ -6,25 +6,32 @@ import { OApp, MessagingFee } from "@layerzerolabs/oapp-evm/contracts/oapp/OApp.
 import { IOAppReceiver, Origin } from "@layerzerolabs/oapp-evm/contracts/oapp/interfaces/IOAppReceiver.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import { IERC721 } from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import { ONFT721MsgCodec } from "@layerzerolabs/onft-evm/contracts/onft721/libs/ONFT721MsgCodec.sol";
 import { ONFTComposeMsgCodec } from "@layerzerolabs/onft-evm/contracts/libs/ONFTComposeMsgCodec.sol";
 
 contract Gallery is ONFT721 {
-
-    constructor(
-        address _lzEndpoint,
-        address _delegate
-    ) ONFT721("Stake of the Art", "SOTA", _lzEndpoint, _delegate) {}
+    constructor(address _lzEndpoint, address _delegate) ONFT721("Stake of the Art", "SOTA", _lzEndpoint, _delegate) {}
 
     struct Enrolment {
         address tokenAddress;
         uint256 tokenId;
-        string imageUri;
+        string metadataUri;
         address rightsHolder;
+        bool created;
     }
 
-    event EnrolmentCreated(address indexed tokenAddress, address indexed rightsHolder, uint256 tokenId, string imageUri, uint256 timestamp);
-    uint32 public counter = 0;
+    uint256 private counter = 0;
+    mapping(uint256 => Enrolment) private gallery;
+    mapping(bytes32 => uint256) private enrolmentId;
+
+    event EnrolmentCreated(
+        address indexed tokenAddress,
+        address indexed rightsHolder,
+        uint256 indexed tokenId,
+        string metadataUri,
+        uint256 timestamp
+    );
 
     /**
      * @dev Internal function to handle the receive on the LayerZero endpoint.
@@ -43,18 +50,39 @@ contract Gallery is ONFT721 {
         bytes calldata _message,
         address /*_executor*/, // @dev unused in the default implementation.
         bytes calldata _extraData // @dev unused in the default implementation.
-    ) internal virtual override {  
-
-        counter += 1;
-        // Enrolment memory _enrolment = abi.decode(_message, (Enrolment));      
-
+    ) internal virtual override {
         // Decode into Exhibit
-        // Enrolment memory exhibit = abi.decode(_extraData, (Enrolment));How do you like a milky tiger
-        // emit EnrolmentCreated(exhibit.tokenAddress, exhibit.rightsHolder, uint32(exhibit.tokenId), exhibit.imageUri, block.timestamp);
-        // emit EnrolmentCreated(_enrolment.tokenAddress, _enrolment.rightsHolder, _enrolment.tokenId, _enrolment.imageUri, uint256(block.timestamp));
+        Enrolment memory _enrolment = abi.decode(_message, (Enrolment));
+        emit EnrolmentCreated(
+            _enrolment.tokenAddress,
+            _enrolment.rightsHolder,
+            _enrolment.tokenId,
+            _enrolment.metadataUri,
+            uint256(block.timestamp)
+        );
+        enrol(_enrolment);
     }
 
-    function ping() public {
+    function enrol(Enrolment memory _enrolment) internal {
+        _mint(_enrolment.rightsHolder, counter);
+
+        bytes32 key = getEnrolmentKey(_enrolment);
+        gallery[counter] = _enrolment;
+        enrolmentId[key] = counter;
         counter += 1;
     }
+
+    function disenrol(Enrolment memory _enrolment) internal {
+        uint256 _tokenId = enrolmentId[getEnrolmentKey(_enrolment)];
+        _burn(_tokenId);
+    }
+
+    function getEnrolmentKey(Enrolment memory _enrolment) internal pure returns (bytes32) {
+        return keccak256(abi.encode(_enrolment));
+    }
+
+    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+        return gallery[tokenId].metadataUri;        
+    }
+
 }

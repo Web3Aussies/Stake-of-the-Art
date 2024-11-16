@@ -10,10 +10,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract StakeOfTheArt is ERC721, ERC721URIStorage, ERC721Pausable, Ownable {
     uint256 private _nextTokenId;
 
-    constructor()
-        ERC721("Stake Of The Art", "SOTA")
-        Ownable(msg.sender)
-    {}
+    constructor() ERC721("Stake Of The Art", "SOTA") Ownable(msg.sender) {}
 
     function pause() public onlyOwner {
         _pause();
@@ -31,29 +28,23 @@ contract StakeOfTheArt is ERC721, ERC721URIStorage, ERC721Pausable, Ownable {
 
     // The following functions are overrides required by Solidity.
 
-    function _update(address to, uint256 tokenId, address auth)
-        internal
-        override(ERC721, ERC721Pausable)
-        returns (address)
-    {
+    function _update(
+        address to,
+        uint256 tokenId,
+        address auth
+    ) internal override(ERC721, ERC721Pausable) returns (address) {
         return super._update(to, tokenId, auth);
     }
 
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override(ERC721, ERC721URIStorage)
-        returns (string memory)
-    {
+    function tokenURI(
+        uint256 tokenId
+    ) public view override(ERC721, ERC721URIStorage) returns (string memory) {
         return super.tokenURI(tokenId);
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC721, ERC721URIStorage)
-        returns (bool)
-    {
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view override(ERC721, ERC721URIStorage) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 }

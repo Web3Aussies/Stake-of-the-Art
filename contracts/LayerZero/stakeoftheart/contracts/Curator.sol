@@ -16,7 +16,7 @@ import { DataLocation } from "@ethsign/sign-protocol-evm/src/models/DataLocation
 import { ISPHook } from "@ethsign/sign-protocol-evm/src/interfaces/ISPHook.sol";
 
 contract Curator is OApp, ISPHook {
-    address public galleryAddress;
+    address public galleryAdd ress;
     address public lzEndpoint;
     address public curatorDelegate;
 

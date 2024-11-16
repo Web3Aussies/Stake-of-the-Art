@@ -141,13 +141,13 @@ contract TestCommunications is TestHelperOz5 {
         // assertEq(gallery.balanceOf(userA), initialBalance);
         // assertEq(collection.balanceOf(address(composer)), 0);
 
-        console.log("Counter", gallery.counter());
+        // console.log("Counter", gallery.counter());
         collection.notifyEnrolment{ value: fee.nativeFee }(galleryEid, 1);
         vm.warp(block.timestamp + 1 minutes);
-        console.log("Counter", gallery.counter());
+        // console.log("Counter", gallery.counter());
 
-        gallery.ping();
-        console.log("Counter", gallery.counter());
+        // gallery.ping();
+        // console.log("Counter", gallery.counter());
 
         // assertEq(gallery.data(), abi.encode("Nothing received yet."));
         // console.log("Peer address: %s", abi.decode(gallery.data(), (address)));

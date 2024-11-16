@@ -1,5 +1,4 @@
-﻿using System.Resources;
-using Amazon.Lambda.S3Events;
+﻿using Amazon.Lambda.S3Events;
 using MassTransit;
 using StakingArt.Models;
 using StakingArt.Services;
@@ -38,6 +37,7 @@ public class FileAddedConsumer : IConsumer<S3Event>
         foreach (var record in message.Records)
         {
             await ProcessAsset(record);
+            await ProcessShare(record);
         }
 
     }
@@ -65,6 +65,27 @@ public class FileAddedConsumer : IConsumer<S3Event>
 
         await _repository.Assets.Update(x => x.Id == assetId, asset);
     }
+    async Task ProcessShare(S3Event.S3EventNotificationRecord record)
+    {
+        var fileKey = record.S3.Object.Key;
+        var keyParts = fileKey.Split('/');
+        var userId = keyParts.First();
+        var shareId = keyParts.Last().Split('.').First();
 
+        var share = await _repository.Shares.Find(x => x.Id, shareId);
+        if (share is null) return;
+
+        share.Status = FileStatus.Sign;
+        share.FileSizeBytes = record.S3.Object.Size;
+        share.BucketName = record.S3.Bucket.Name;
+        share.ObjectKey = fileKey;
+
+        if (!string.IsNullOrWhiteSpace(record.RequestParameters?.SourceIPAddress))
+            share.Meta.Add(nameof(record.RequestParameters.SourceIPAddress), record.RequestParameters.SourceIPAddress);
+
+        share.UpdatedOn = DateTimeOffset.UtcNow;
+
+        await _repository.Shares.Update(x => x.Id == shareId, share);
+    }
 
 }

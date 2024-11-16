@@ -33,6 +33,7 @@
 		<PackageReference Include="Nethereum.KeyStore" Version="4.26.0" />
 		<PackageReference Include="Nethereum.Util" Version="4.26.0" />
 		<PackageReference Include="OpenAI" Version="2.0.0" />
+		<PackageReference Include="PinataNET" Version="1.0.2" />
 		<PackageReference Include="Refit" Version="8.0.0" />
 		<PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
 		<PackageReference Include="Refit.Newtonsoft.Json" Version="8.0.0" />

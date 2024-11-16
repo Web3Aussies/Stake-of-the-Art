@@ -36,10 +36,11 @@ const Categories = ({ data, clearCat, onHandleSelect, type = "Category" }: Categ
       <>
         {type === "Color" ?
           <Button
+            key={cat.name}
             style={{ backgroundColor: cat.name}}
             onClick={() => handleClick(cat)} size="xs" className={clsx(styles.colorButton)}/>
           :
-          <Button onClick={() => handleClick(cat)} size="xs" className={clsx(styles.categoryButton)}>{cat.name}</Button>}
+          <Button key={cat.name} onClick={() => handleClick(cat)} size="xs" className={clsx(styles.categoryButton)}>{cat.name}</Button>}
       </>
     )
   });

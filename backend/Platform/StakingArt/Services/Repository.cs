@@ -11,6 +11,7 @@ public interface IRepository
     ModelSet<User> Users { get; }
     ModelSet<Asset> Assets { get; }
     ModelSet<Category> Categories { get; }
+    ModelSet<Nonce> Nonces { get; }
     TModel? Get<TModel>(string id, bool forTenant = false) where TModel : class, new();
     string? GetLoggedInUserId();
     UserDto? GetLoggedInUserDto();
@@ -29,12 +30,14 @@ public class Repository : IRepository
         Users = new(database, "users");
         Assets = new(database, "assets");
         Categories = new(database, "categories");
+        Nonces = new(database, "nonces");
     }
 
     public ModelSet<User> Users { get; }
     public ModelSet<Asset> Assets { get; }
     public ModelSet<Category> Categories { get; }
-    
+    public ModelSet<Nonce> Nonces { get; }
+
     public TModel? Get<TModel>(string id, bool forTenant = false) where TModel : class, new()
     {
         if (forTenant)
@@ -52,6 +55,7 @@ public class Repository : IRepository
         return new TModel() switch
         {
             User => Users.Collection.Find(Users.Filter.Eq(x => x.Id, id)).SingleOrDefault() as TModel,
+            Nonce => Nonces.Collection.Find(Nonces.Filter.Eq(x => x.Id, id)).SingleOrDefault() as TModel,
             _ => throw new ArgumentOutOfRangeException()
         };
     }

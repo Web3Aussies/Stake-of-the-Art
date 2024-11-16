@@ -77,6 +77,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddSingleton<IStorageService, S3StorageService>();
 builder.Services.AddSingleton<ImageService>();
 builder.Services.AddScoped<IWorldCoinService, WorldCoinService>();
+builder.Services.AddScoped<ISecurityService, SecurityService>();
 
 var app = builder.Build();
 

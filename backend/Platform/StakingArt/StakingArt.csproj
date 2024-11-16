@@ -15,6 +15,8 @@
 	  <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.301" />
 	  <PackageReference Include="AWSSDK.S3" Version="3.7.405.4" />
 	  <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.400.40" />
+	  <PackageReference Include="FluentValidation" Version="11.10.0" />
+	  <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
 	  <PackageReference Include="LazyCache" Version="2.4.0" />
 	  <PackageReference Include="LazyCache.AspNetCore" Version="2.4.0" />
 	  <PackageReference Include="MediatR" Version="12.4.1" />

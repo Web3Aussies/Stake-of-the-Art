@@ -16,13 +16,13 @@ export default function PublicLayout() {
                 </main>
 
                 <Footer container className="my-auto">
-                    <Footer.Copyright href="#" by="Wallpaper" year={2024} />
+                    <Footer.Copyright href="#" by="Staking Art" year={2024} />
                 </Footer>
             </div>
-            <Suspense>
+            {/* <Suspense>
                 <TanStackRouterDevtools />
                 <ReactQueryDevtools initialIsOpen={false} />
-            </Suspense>
+            </Suspense> */}
         </Flowbite>
     );
 }

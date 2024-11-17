@@ -148,6 +148,38 @@ Send Transaction: 0x2fd434701208f9f7552bc53db86a6e73a83099bbda463123400198b48874
 ### Sign Protocol
 
 #### Schema Hooks
-- **Schema Hooks**
-  - Release subscription payments to content creators
-  - Safely manage subscriber's payments.
+We use attestations to represent the royalty rights of an artist to a particular artwork.
+
+```
+    struct RoyaltyRights {
+        address tokenAddress;
+        uint256 tokenId;
+        address owner;
+        string signature;
+    }
+```
+
+We stored the token id of a particular token and identify the owner of the royalty rights.
+A signature based on the world id proof signifies that this action has been approved by original creator.
+
+We implemented schema hooks to listen out for changes to the attestation changes.
+Whenever an attestation is created we notify The gallery on the nfts enrollment into the gallery.
+On the flip side if it has test station is revoked, we notify the gallery to burn the nft representing the enrollment.
+
+```
+    function onAttestationCreated(bytes32 schemaId, bytes32 attestationId, address issuer, address subject, bytes data) external override {
+        RoyaltyRights memory rights = abi.decode(data, (RoyaltyRights));
+        emit AttestationCreated(schemaId, attestationId, issuer, subject, rights.tokenAddress, rights.tokenId, rights.owner, rights.signature);
+        if (rights.owner == subject) {
+            gallery.mint(subject, rights.tokenAddress, rights.tokenId);
+        }
+    }
+
+    function onAttestationRevoked(bytes32 schemaId, bytes32 attestationId, address issuer, address subject, bytes data) external override {
+        RoyaltyRights memory rights = abi.decode(data, (RoyaltyRights));
+        emit AttestationRevoked(schemaId, attestationId, issuer, subject, rights.tokenAddress, rights.tokenId, rights.owner, rights.signature);
+        if (rights.owner == subject) {
+            gallery.burn(subject, rights.tokenAddress, rights.tokenId);
+        }
+    }
+```

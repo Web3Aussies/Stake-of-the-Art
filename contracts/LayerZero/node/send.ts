@@ -15,7 +15,7 @@ const { Options } = require("@layerzerolabs/lz-v2-utilities");
 dotenv.config();
 
 const rpcUrl = process.env.RPC_URL || "";
-const curatorAddress = "0x6A0704FFc0ef762bAAD164c42aC2F6A8382806d5"; // Replace with your contract address
+const curatorAddress = "0x00fa2599575A78687C1148EB5C74EC35Bd05dc4c"; // Replace with your contract address
 const curator = JSON.parse(fs.readFileSync("./Curator.json", "utf-8"));
 const privateKey = process.env.PRIVATE_KEY || "";
 const account = privateKeyToAccount(privateKey);

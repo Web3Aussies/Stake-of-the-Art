@@ -34,6 +34,8 @@ connectToDatabase()
 
         app.get('/filecoin/store/:cid', (req: Request, res: Response, next: NextFunction) => tryCatch(req, res, next, StoreHandler));
 
+        app.get('/filecoin/retrieve/:cid', (req: Request, res: Response, next: NextFunction) => tryCatch(req, res, next, StoreHandler));
+
         app.post('/chain/mint', (req: Request, res: Response, next: NextFunction) => tryCatch(req, res, next, MintHandler));
 
         app.listen(port, () => {

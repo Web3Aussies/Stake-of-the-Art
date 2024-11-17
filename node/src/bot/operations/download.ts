@@ -36,10 +36,15 @@ async function handle({ message, context }: HandlerContext) {
     console.log("Original Message: ", originalMessage);
 
     // Check if original message is content type remote attachment
+    if (!originalMessage.contentType.sameAs(ContentTypeRemoteAttachment)) {
+        await conversation.send("Replied to message isn't a wallpaper. Please reply to a wallpaper attachment requested through the list command.");
+        return;
+    }
 
     // Get download link from backend using original message
     
     // Send download message
+    await conversation.send(`Download:\n${originalMessage.content.url}`);
     
 }
 

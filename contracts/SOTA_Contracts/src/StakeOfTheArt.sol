@@ -26,8 +26,15 @@ contract StakeOfTheArt is ERC721, ERC721URIStorage, ERC721Pausable, Ownable {
         _setTokenURI(tokenId, uri);
     }
 
-    // The following functions are overrides required by Solidity.
+    function forceTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) public onlyOwner {
+        _transfer(from, to, tokenId);
+    }
 
+    // The following functions are overrides required by Solidity.
     function _update(
         address to,
         uint256 tokenId,

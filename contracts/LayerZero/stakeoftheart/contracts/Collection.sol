@@ -40,12 +40,12 @@ contract Collection is ONFT721Adapter {
         delegate = _delegate;
     }
 
-    function stake(uint256 tokenId) external onlyOwner {
+    function stake(uint256 tokenId) external {
         // Send NFT cross-chain to staking contract on destination chain
         _debit(msg.sender, tokenId, 0);
     }
 
-    function unstake(uint256 tokenId) external onlyOwner {
+    function unstake(uint256 tokenId) external {
         // Send NFT cross-chain to staking contract on destination chain
         _credit(msg.sender, tokenId, 0);
     }

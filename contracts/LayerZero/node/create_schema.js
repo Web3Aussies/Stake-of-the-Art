@@ -4,7 +4,7 @@ const { SignProtocolClient, SpMode, EvmChains } = require("@ethsign/sp-sdk");
 const { privateKeyToAccount } = require("viem/accounts");
 
 // Congifurable parameters
-const hookAddress = process.argv[2];
+const hookAddress = "0x9C9eEA023D925F89846af7d850ae974357eaA33f";
 
 // Set up Wallet
 const privateKey = process.env.PRIVATE_KEY;
@@ -20,8 +20,8 @@ const createSchema = async () => {
         data: [
             { name: 'tokenAddress', type: 'address' },
             { name: 'tokenId', type: 'uint256' },
-            { name: 'rightsHolder', type: 'address' },
-            { name: 'worldIDSignature', type: 'string' }
+            { name: 'owner', type: 'address' },
+            { name: 'signature', type: 'string' }
         ],
         hook: hookAddress
     });

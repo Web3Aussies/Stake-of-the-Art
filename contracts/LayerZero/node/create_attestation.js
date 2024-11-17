@@ -7,8 +7,9 @@ const { encodeAbiParameters } = require("viem");
 
 // Congifurable parameters
 const rightsHolder = process.env.PUBLIC_KEY
-const schemaId = process.env.SCHEMA_ID;
+const schemaId = 0xa9;
 const tokenAddress = process.env.TOKEN_ADDRESS;
+
 // Set up Wallet
 const privateKey = process.env.PRIVATE_KEY;
 const client = new SignProtocolClient(SpMode.OnChain, {
@@ -30,8 +31,8 @@ const attest = async ({
     [
       { name: 'tokenAddress', type: 'address' },
       { name: 'tokenId', type: 'uint256' },
-      { name: 'rightsHolder', type: 'address' },
-      { name: 'worldIDSignature', type: 'string' }
+      { name: 'owner', type: 'address' },
+      { name: 'signature', type: 'string' }
     ],
     [
       tokenAddress,

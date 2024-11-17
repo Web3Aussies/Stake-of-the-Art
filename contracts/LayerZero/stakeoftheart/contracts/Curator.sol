@@ -34,9 +34,9 @@ contract Curator is OApp, ISPHook {
 
     constructor(address _endpoint, address _delegate) OApp(_endpoint, _delegate) Ownable(_delegate) {}
 
-    function supportToken(address tokenAddress, address collectionAddress) public {                
+    function supportToken(address tokenAddress, address collectionAddress) public {
         collections[tokenAddress] = collectionAddress;
-    }    
+    }
 
     function send(
         uint32 _dstEid,
@@ -65,9 +65,8 @@ contract Curator is OApp, ISPHook {
         bytes calldata /*_extraData*/
     ) internal override {}
 
-
-    // Handle Sign Protocol events    
-     struct RoyaltyRights {
+    // Handle Sign Protocol events
+    struct RoyaltyRights {
         address tokenAddress;
         uint256 tokenId;
         address owner;
@@ -80,7 +79,7 @@ contract Curator is OApp, ISPHook {
         uint64 schemaId,
         uint64 attestationId,
         bytes calldata extraData
-    ) external payable override {        
+    ) external payable override {
         RoyaltyRights memory rights = abi.decode(extraData, (RoyaltyRights));
         Collection collection = Collection(collections[rights.tokenAddress]);
         collection.setRoyaltyRights(rights.tokenId, rights.owner, rights.signature);
@@ -95,7 +94,6 @@ contract Curator is OApp, ISPHook {
         bytes calldata extraData
     ) external override {}
 
-
     // When an attestation is revoked, the owner loses the right to receive royalties
     function didReceiveRevocation(
         address attester,
@@ -104,6 +102,7 @@ contract Curator is OApp, ISPHook {
         bytes calldata extraData
     ) external payable override {
         RoyaltyRights memory rights = abi.decode(extraData, (RoyaltyRights));
+        
         Collection collection = Collection(collections[rights.tokenAddress]);
         collection.revokeRoyaltyRights(rights.tokenId);
     }

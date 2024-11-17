@@ -4,9 +4,7 @@ import dotenv from "dotenv";
 
 export type RetrieveHandlerResponse = {
     cid: string,
-    dealUUID: string,
-    storageProvider: string,
-    dealStatus: string
+    imageBlob: Blob
 }
 
 export const RetrieveHandler = async (req: Request, res: Response) => {
@@ -28,10 +26,15 @@ export const RetrieveHandler = async (req: Request, res: Response) => {
             console.log(result);
         });
 
+        let imageRes = {};
         await ssh.execCommand(`car extract -f ~/retrieve/${cid}.car`).then((result) => {
             console.log(result);
+
+            imageRes = result.stdout;
         });
 
-        return;
+        
+
+        res.send(imageRes);
     });
 }

@@ -128,6 +128,6 @@ export const StoreHandler = async (req: Request, res: Response) => {
             console.log(storeResponse.dealStatus);
         });
 
-        return storeResponse;
+        res.send(storeResponse);
     })
 }
